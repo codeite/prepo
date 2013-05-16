@@ -23,9 +23,19 @@ namespace prepo.Api.Tests
 
             // Assert
             Console.WriteLine(root.Body);
-            root.Body.ShouldBe(@"{""_links"":{},""self"":{""href"":""/""},""users"":{""href"":""/users""}}");
+            root.Body.ShouldBeJson(@"{""_links"":{ },""self"":{""href"":""/""},""users"":{""href"":""/users""}}");
+        }
 
+    }
 
+    public static class JsonAssertionHelper
+    {
+        public static void ShouldBeJson(this string actual, string expected)
+        {
+            var cannonicalizer = new Codeite.Core.Json.JsonCannonicalizer();
+            var actualCannonical = cannonicalizer.Cannonicalize(actual);
+            var expectedCannonical = cannonicalizer.Cannonicalize(expected);
+            ShouldBeTestExtensions.ShouldBe(actualCannonical, expectedCannonical);
         }
     }
 }
