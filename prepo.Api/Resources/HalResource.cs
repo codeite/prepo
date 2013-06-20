@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using prepo.Api.Contracts.Models;
@@ -20,8 +22,6 @@ namespace prepo.Api.Resources
             get { return _self; }
         }
 
-        public abstract IEnumerable<ResourceLink> GetRelatedResources();
-
         public object ToDynamicJson()
         {
             var root = new Dictionary<string, object>();
@@ -30,7 +30,25 @@ namespace prepo.Api.Resources
             links[_self.Name] = MakeHref(_self.Href);
             foreach (var relatedResource in GetRelatedResources())
             {
-                links[relatedResource.Name] = MakeHref(relatedResource.Href);
+                var href = MakeHref(relatedResource.Href);
+
+                if (links.ContainsKey(relatedResource.Name))
+                {
+                    var item = links[relatedResource.Name];
+
+                    if (item is IList)
+                    {
+                        (item as IList).Add(href);
+                    }
+                    else
+                    {
+                        links[relatedResource.Name] = new List<object> { item, href };
+                    }
+                }
+                else
+                {
+                    links[relatedResource.Name] = href;
+                }
             }
             root["_links"] = links;
             AddProperties(root);
@@ -38,9 +56,14 @@ namespace prepo.Api.Resources
             return root;
         }
 
-        public virtual void AddProperties(Dictionary<string, object> dictionary)
+        protected virtual void AddProperties(Dictionary<string, object> dictionary)
         {
             
+        }
+
+        public virtual IEnumerable<ResourceLink> GetRelatedResources()
+        {
+            yield break;
         }
 
         public virtual IEnumerable<HalResource> GetEmbededResources()
@@ -54,53 +77,45 @@ namespace prepo.Api.Resources
         }
     }
 
-    public class ResourceLink
+    public abstract class HalResource<T> 
+        : HalResource
+        where T : DbObject
     {
-        public ResourceLink(string name, string href, string title = null)
+        private readonly T _instance;
+
+        protected HalResource(string selfHref, T instance) : base(selfHref)
         {
-            Name = name;
-            Href = href;
-            Title = title;
+            _instance = instance;
         }
 
-        public string Name { get; set; }
-        public string Href { get; set; }
-        public string Title { get; set; }
-    }
-
-    public class RootResource : HalResource
-    {
-        public const string Self = "/";
-        public RootResource()
-            : base(Self)
-        { }
-
-        public override IEnumerable<ResourceLink> GetRelatedResources()
+        public T Instance
         {
-            yield return new ResourceLink("users", UsersResource.Self);
+            get { return _instance; }
         }
-    }
 
-    public class UsersResource : HalResource
-    {
-        public const string Self = RootResource.Self + "users";
-        public UsersResource()
-            : base(Self)
-        { }
-
-        public IEnumerable<PrepoUser> Users { get; set; }
-
-        public override IEnumerable<ResourceLink> GetRelatedResources()
+        protected override void AddProperties(Dictionary<string, object> dictionary)
         {
-            yield return new ResourceLink("first", Self+"?page=1&count=10");
+            var type = typeof (T);
 
-            if (Users != null)
+            foreach (var propertyInfo in type.GetProperties())
             {
-                foreach (var user in Users)
-                {
-                    yield return new ResourceLink("user", Self+"/"+user.Id);
-                }
+                var name = FixName(propertyInfo.Name);
+                var value = propertyInfo.GetValue(_instance);
+
+                dictionary.Add(name, value);
             }
+        }
+
+        private string FixName(string name)
+        {
+            if (name.Length > 0)
+            {
+                var first = name[0].ToString(CultureInfo.InvariantCulture).ToLower()[0];
+
+                name = first + name.Substring(1);
+            }
+
+            return name;
         }
     }
 

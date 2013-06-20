@@ -6,37 +6,48 @@ using prepo.Api.Contracts.Services;
 
 namespace prepo.Api.Services
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : MemoryRepository<PrepoUser>, IUserRepository
     {
 
-        public PrepoUser GetOne(string id)
+    }
+
+    public class MemoryRepository<T> where T : DbObject
+    {
+        private static readonly Dictionary<string, T> _store = new Dictionary<string, T>(); 
+
+        public T GetOne(string id)
         {
-            throw new NotImplementedException();
+            return _store[id];
         }
 
-        public IEnumerable<PrepoUser> GetMany(int? page, int? count)
+        public IEnumerable<T> GetMany(int page, int count)
         {
-            throw new NotImplementedException();
+            var start = (page - 1)*count;
+            return _store.Values.Skip(start).Take(count).ToList();
         }
 
-        public void Put(PrepoUser item)
+        public void Put(T item)
         {
-            throw new NotImplementedException();
+            _store[item.Id] = item;
         }
 
-        public string Post(PrepoUser item)
+        public string Post(T item)
         {
-            throw new NotImplementedException();
+            item.Id = (_store.Keys.Select(int.Parse).Max() + 1).ToString();
+
+            _store[item.Id] = item;
+
+            return item.Id;
         }
 
         public void Delete(string id)
         {
-            throw new NotImplementedException();
+            _store.Remove(id);
         }
 
         public IQueryable Query()
         {
-            throw new NotImplementedException();
+            return _store.AsQueryable();
         }
     }
 }

@@ -58,5 +58,59 @@ namespace prepo.Client
 
             return new ApiResource(_response.Get(linkHref));
         }
+
+        public ApiResource FollowRel(string name, object arguments)
+        {
+            var linkHrefTemplate = Json["_links"][name]["href"] as string;
+
+            var template = new UriTemplate(linkHrefTemplate);
+
+            var args = ToDictionary(arguments);
+
+            foreach (var arg in args)
+            {
+                template.SetParameter(arg.Key, arg.Value);
+            }
+
+            var href = template.Resolve();
+
+            return new ApiResource(_response.Get(href));
+        }
+
+        public string PutToRel(string name, object arguments, BodyContent content)
+        {
+            var linkHrefTemplate = Json["_links"][name]["href"] as string;
+
+            var template = new UriTemplate(linkHrefTemplate);
+
+            var args = ToDictionary(arguments);
+
+            foreach (var arg in args)
+            {
+                template.SetParameter(arg.Key, arg.Value);
+            }
+
+            var href = template.Resolve();
+
+            return _response.Put(href, content).Location;
+        }
+
+        public string PostToRel(string name, BodyContent content)
+        {
+            var linkHref = Json["_links"][name]["href"] as string;
+
+            return _response.Post(linkHref, content).Location;
+        }
+
+        private IEnumerable<KeyValuePair<string, string>> ToDictionary(object arguments)
+        {
+            var type = arguments.GetType();
+
+            return type.GetProperties()
+                .ToDictionary(
+                    p => p.Name, 
+                    p => p.GetValue(arguments).ToString());
+
+        }
     }
 }

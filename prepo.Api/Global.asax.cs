@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
-using System.Web.Mvc;
-using System.Web.Optimization;
 using System.Web.Routing;
 
 namespace prepo.Api
@@ -16,11 +14,9 @@ namespace prepo.Api
     {
         protected void Application_Start()
         {
-            AreaRegistration.RegisterAllAreas();
-
+          
             IocConfig.ConfigureIoc(GlobalConfiguration.Configuration);
             WebApiConfig.Register(GlobalConfiguration.Configuration);
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Web;
 using Codeite.Core.Json;
 using Newtonsoft.Json;
@@ -17,7 +18,6 @@ namespace prepo.Api.Infrastructure
         {
             this.SupportedMediaTypes.Add(new MediaTypeWithQualityHeaderValue("application/hal+json"));
             this.SupportedMediaTypes.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
         }
 
         public override bool CanReadType(Type type)
@@ -46,6 +46,26 @@ namespace prepo.Api.Infrastructure
             var json = halResource.ToDynamicJson().ToJsonString();
             writer.Write(json);
             writer.Flush();
+        }
+
+        public override object ReadFromStream(Type type, Stream readStream, System.Net.Http.HttpContent content, IFormatterLogger formatterLogger)
+        {
+            var json = DynamicJsonObject.ReadJson(content.ReadAsStringAsync().Result);
+            string id = json["id"].ToString();
+
+            var dboType = GetDbObjectType(type);
+
+            object dboInstance = Activator.CreateInstance(dboType, id);
+
+            object resourceInstance = Activator.CreateInstance(type, dboInstance);
+
+            return resourceInstance;
+        }
+
+        private Type GetDbObjectType(Type resourceType)
+        {
+            ConstructorInfo ctor = resourceType.GetConstructors().Single();
+            return ctor.GetParameters().Single().ParameterType;
         }
     }
 }

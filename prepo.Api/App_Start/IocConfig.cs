@@ -1,6 +1,10 @@
-﻿using System.Web.Http;
-using Codeite.SamIoc;
-using Codeite.SamIoc.WebApi;
+﻿using System;
+using System.Linq;
+using System.Reflection;
+using System.Web.Http;
+using Autofac;
+using Autofac.Integration.WebApi;
+using prepo.Api.Contracts.Services;
 using prepo.Api.Services;
 
 namespace prepo.Api
@@ -9,17 +13,33 @@ namespace prepo.Api
     {
         public static void ConfigureIoc(HttpConfiguration configuration)
         {
-            ISamIoc container = SamIoc.CreateInstance();
-            container.AutoRegisterConcreteTypes = true;
+            var builder = new ContainerBuilder();
 
-            RegisterServices(container);
+            RegisterControllers(builder);
+            RegisterServices(builder);
 
-            configuration.DependencyResolver = new SamIocWebApiDependencyResolver(container);
+            var container = builder.Build();
+
+            configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
         }
 
-        private static void RegisterServices(ISamIoc container)
+        private static void RegisterControllers(ContainerBuilder builder)
         {
-            container.Register<ResourceRepository>();
+            var controllers = Assembly.GetExecutingAssembly()
+                                      .GetTypes()
+                                      .Where(t => t.IsAssignableTo<ApiController>());
+
+            foreach (var controller in controllers)
+            {
+                builder.RegisterType(controller);
+            }
+        }
+
+        private static void RegisterServices(ContainerBuilder builder)
+        {
+            builder.RegisterType<ResourceRepository>();
+            builder.RegisterType<RepositoryFactory>().As<IRepositoryFactory>();
+            builder.RegisterType<UserRepository>().As<IUserRepository>();
         }
     }
 }
