@@ -21,6 +21,36 @@ namespace prepo.Api.Resources
 
         public abstract IEnumerable<ResourceLink> GetRelatedResources();
 
+        public object ToDynamicJson()
+        {
+            var root = new Dictionary<string, object>();
+            var links = new Dictionary<string, object>();
+
+            links[_self.Name] = MakeHref(_self.Href);
+            foreach (var relatedResource in GetRelatedResources())
+            {
+                links[relatedResource.Name] = MakeHref(relatedResource.Href);
+            }
+            root["_links"] = links;
+            AddProperties(root);
+            GetEmbededResources();
+            return root;
+        }
+
+        public virtual void AddProperties(Dictionary<string, object> dictionary)
+        {
+            
+        }
+
+        public virtual IEnumerable<HalResource> GetEmbededResources()
+        {
+            yield break;
+        }
+
+        private Dictionary<string, object> MakeHref(string value)
+        {
+            return new Dictionary<string, object> {{"href", value}};
+        }
     }
 
     public class ResourceLink

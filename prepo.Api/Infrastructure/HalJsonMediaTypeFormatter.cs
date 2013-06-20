@@ -5,12 +5,13 @@ using System.Linq;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Web;
+using Codeite.Core.Json;
 using Newtonsoft.Json;
 using prepo.Api.Resources;
 
 namespace prepo.Api.Infrastructure
 {
-    public class HalJsonMediaTypeFormatter : BufferedMediaTypeFormatter 
+    public class HalJsonMediaTypeFormatter : BufferedMediaTypeFormatter
     {
         public HalJsonMediaTypeFormatter()
         {
@@ -31,7 +32,7 @@ namespace prepo.Api.Infrastructure
             return cwt;
         }
 
-        public override void WriteToStream(Type type, object value, System.IO.Stream writeStream, System.Net.Http.HttpContent content)
+        public override void WriteToStream(Type type, object value, Stream writeStream, System.Net.Http.HttpContent content)
         {
             var halResource = value as HalResource;
 
@@ -39,27 +40,34 @@ namespace prepo.Api.Infrastructure
             {
                 return;
             }
-            
-            var writer = new JsonTextWriter(new StreamWriter(writeStream));
-            
-            writer.WriteStartObject();
-            writer.WritePropertyName("_links");
-            writer.WriteStartObject();
-            writer.WriteEndObject();
 
-            WriteLink(writer, halResource.SelfLink);
+            var writer = new StreamWriter(writeStream);
+
+            var json = halResource.ToDynamicJson().ToJsonString();
+            writer.Write(json);
+            writer.Flush();
+            return;
+
+            var jsonTextWriter = new JsonTextWriter(writer);
+
+            jsonTextWriter.WriteStartObject();
+            jsonTextWriter.WritePropertyName("_links");
+            jsonTextWriter.WriteStartObject();
+
+            WriteLink(jsonTextWriter, halResource.SelfLink);
 
             foreach (var relatedResource in halResource.GetRelatedResources())
             {
-                WriteLink(writer, relatedResource);
+                WriteLink(jsonTextWriter, relatedResource);
             }
 
-            writer.WriteEndObject();
-            writer.Flush();
+            jsonTextWriter.WriteEndObject();
+            jsonTextWriter.WriteEndObject();
+            jsonTextWriter.Flush();
         }
 
         private void WriteLink(JsonTextWriter writer, ResourceLink link)
-        { 
+        {
             writer.WritePropertyName(link.Name);
             writer.WriteStartObject();
             writer.WritePropertyName("href");

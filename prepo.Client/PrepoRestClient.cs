@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Everest;
+using Everest.Content;
 using Everest.Pipeline;
 
 namespace prepo.Client
@@ -22,9 +23,29 @@ namespace prepo.Client
             _client = new RestClient(baseUri, options);    
         }
 
-        public Response GetRoot()
+        public ApiResource GetRoot()
         {
-            return _client.Get("/");
+            return new ApiResource(_client.Get("/"));
+        }
+    }
+
+    public class ApiResource 
+    {
+        private readonly Response _response;
+
+        public ApiResource(Response response)
+        {
+            _response = response;
+        }
+
+        public string Body
+        {
+            get { return _response.Body; }
+        }
+
+        public ApiResource FollowRel(string users)
+        {
+            throw new NotImplementedException();
         }
     }
 }

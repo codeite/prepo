@@ -4,7 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "prepo.Api", "prepo.Api\prepo.Api.csproj", "{23345161-6C39-40B8-9851-2501B3A6D61F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{D9C3B6B4-9693-4C89-83A9-7613255323D1} = {D9C3B6B4-9693-4C89-83A9-7613255323D1}
-		{848ABCE4-0073-4333-B94F-D17F361AAF3C} = {848ABCE4-0073-4333-B94F-D17F361AAF3C}
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1C8FF987-A0A8-46F5-BF43-0528C9396BAE}"
@@ -15,6 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1C8FF9
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "prepo.Api.Tests", "prepo.Api.Tests\prepo.Api.Tests.csproj", "{848ABCE4-0073-4333-B94F-D17F361AAF3C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{23345161-6C39-40B8-9851-2501B3A6D61F} = {23345161-6C39-40B8-9851-2501B3A6D61F}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "prepo.Client", "prepo.Client\prepo.Client.csproj", "{D9C3B6B4-9693-4C89-83A9-7613255323D1}"
 EndProject
