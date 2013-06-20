@@ -46,38 +46,6 @@ namespace prepo.Api.Infrastructure
             var json = halResource.ToDynamicJson().ToJsonString();
             writer.Write(json);
             writer.Flush();
-            return;
-
-            var jsonTextWriter = new JsonTextWriter(writer);
-
-            jsonTextWriter.WriteStartObject();
-            jsonTextWriter.WritePropertyName("_links");
-            jsonTextWriter.WriteStartObject();
-
-            WriteLink(jsonTextWriter, halResource.SelfLink);
-
-            foreach (var relatedResource in halResource.GetRelatedResources())
-            {
-                WriteLink(jsonTextWriter, relatedResource);
-            }
-
-            jsonTextWriter.WriteEndObject();
-            jsonTextWriter.WriteEndObject();
-            jsonTextWriter.Flush();
-        }
-
-        private void WriteLink(JsonTextWriter writer, ResourceLink link)
-        {
-            writer.WritePropertyName(link.Name);
-            writer.WriteStartObject();
-            writer.WritePropertyName("href");
-            writer.WriteValue(link.Href);
-            writer.WriteEndObject();
-        }
-
-        public override object ReadFromStream(Type type, Stream readStream, System.Net.Http.HttpContent content, IFormatterLogger formatterLogger)
-        {
-            return base.ReadFromStream(type, readStream, content, formatterLogger);
         }
     }
 }

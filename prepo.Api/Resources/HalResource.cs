@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using prepo.Api.Contracts.Models;
 
 namespace prepo.Api.Resources
 {
@@ -76,20 +77,30 @@ namespace prepo.Api.Resources
 
         public override IEnumerable<ResourceLink> GetRelatedResources()
         {
-            yield return new ResourceLink("users", UserResource.Self);
+            yield return new ResourceLink("users", UsersResource.Self);
         }
     }
 
-    public class UserResource : HalResource
+    public class UsersResource : HalResource
     {
         public const string Self = RootResource.Self + "users";
-        public UserResource()
+        public UsersResource()
             : base(Self)
         { }
 
+        public IEnumerable<PrepoUser> Users { get; set; }
+
         public override IEnumerable<ResourceLink> GetRelatedResources()
         {
-            yield break;
+            yield return new ResourceLink("first", Self+"?page=1&count=10");
+
+            if (Users != null)
+            {
+                foreach (var user in Users)
+                {
+                    yield return new ResourceLink("user", Self+"/"+user.Id);
+                }
+            }
         }
     }
 

@@ -46,8 +46,42 @@ namespace prepo.Api.Tests
             users.Body.ShouldBeJson(@"
             {
                 '_links': { 
-                    'self': {'href': '/'},
-                    'users': {'href': '/users'}
+                    'self': {'href': '/users'},
+                    'first': {'href': '/users?page=1&count=10'}
+                }
+            }");
+        }
+
+        [Test]
+        public void GetFirstTenUsers()
+        {
+            // Arrange
+            var client = new PrepoRestClient();
+
+            // Act
+            var users = client.GetRoot()
+                .FollowRel("users")
+                .FollowRel("first");
+
+            // Assert
+            Console.WriteLine(users.Body);
+            users.Body.ShouldBeJson(@"
+            {
+                '_links': { 
+                    'self': {'href': '/users'},
+                    'first': {'href': '/users?page=1&count=10'},
+                    'users':[
+                        { 'href': '/users/1'},
+                        { 'href': '/users/2'},
+                        { 'href': '/users/3'},
+                        { 'href': '/users/4'},
+                        { 'href': '/users/5'},
+                        { 'href': '/users/6'},
+                        { 'href': '/users/7'},
+                        { 'href': '/users/8'},
+                        { 'href': '/users/9'},
+                        { 'href': '/users/10'}   
+                    ]
                 }
             }");
         }

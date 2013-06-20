@@ -18,16 +18,12 @@ namespace prepo.Api.Controllers
             _repository = repository;
         }
 
-        protected override RootResource GetResource()
+        protected override RootResource GetResource(int? page, int? count)
         {
             return _repository.GetRootResource();
         }
     }
 
-    public class UserController : ResourceApiController<UserResource>
-    {
-
-    }
     /*
     public class PersonaController : ResourceApiController<PersonaResource>
     {
@@ -46,14 +42,14 @@ namespace prepo.Api.Controllers
     */
     public abstract class ResourceApiController<T> : ApiController where T : HalResource
     {
-        protected virtual T GetResource()
+        protected virtual T GetResource(int? page, int? count)
         {
             return null;
         }
 
-        public virtual HttpResponseMessage Get()
+        public virtual HttpResponseMessage Get(int? page = null, int? count = null)
         {
-            var resource = GetResource();
+            var resource = GetResource(page, count);
 
             var response =  Request.CreateResponse(resource != null ? HttpStatusCode.OK : HttpStatusCode.NotFound,
                                           resource);
