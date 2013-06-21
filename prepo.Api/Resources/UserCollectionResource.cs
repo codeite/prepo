@@ -3,10 +3,11 @@ using prepo.Api.Contracts.Models;
 
 namespace prepo.Api.Resources
 {
-    public class UsersResource : HalCollectionResource<PrepoUser>
+    public class UserCollectionResource : HalCollectionResource<PrepoUser>
     {
         public const string Self = RootResource.Self + "users";
-        public UsersResource()
+
+        public UserCollectionResource()
             : base(Self)
         { }
 

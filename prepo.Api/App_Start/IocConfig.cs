@@ -39,10 +39,9 @@ namespace prepo.Api
 
         private static void RegisterServices(ContainerBuilder builder)
         {
-            builder.RegisterType<UserResourceRepository>();
             builder.RegisterType<RootResourceRepository>();
-
-            builder.RegisterType<RepositoryFactory>().As<IRepositoryFactory>();
+            builder.RegisterType<UserResourceRepository>();
+            builder.RegisterType<PersonaResourceRepository>();
         }
     }
 }

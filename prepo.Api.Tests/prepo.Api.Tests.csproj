@@ -62,9 +62,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BasicPersonaTests.cs" />
     <Compile Include="BasicTests.cs" />
     <Compile Include="BasicUserTests.cs" />
     <Compile Include="JsonAssertionHelper.cs" />
+    <Compile Include="PersonaBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserBuilder.cs" />
   </ItemGroup>

@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using prepo.Api.Contracts.Models;
+using prepo.Api.Contracts.Services;
 
 namespace prepo.Api.Repo.Memory
 {
-    public class MemoryRepository<T> where T : DbObject
+    public class MemoryRepository<T> : IRepository<T>
+        where T : DbObject
     {
         public static readonly Dictionary<string, T> Store = new Dictionary<string, T>();
 

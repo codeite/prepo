@@ -29,11 +29,6 @@ namespace prepo.Api.Controllers
     }
 
     /*
-    public class PersonaController : ResourceApiController<PersonaResource>
-    {
-
-    }
-
     public class AddressesController : ResourceApiController<AddressesResource>
     {
         

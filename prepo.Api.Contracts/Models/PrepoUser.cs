@@ -16,9 +16,11 @@ namespace prepo.Api.Contracts.Models
         public string Name { get; set; }
     }
 
-    public class DbObject
+    public class PrepoPersona : DbObject
     {
-        public string Id { get; set; }
-
+        public PrepoPersona(string id)
+        {
+            Id = id;
+        }
     }
 }

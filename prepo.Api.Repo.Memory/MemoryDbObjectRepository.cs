@@ -7,7 +7,7 @@ using prepo.Api.Contracts.Services;
 
 namespace prepo.Api.Repo.Memory
 {
-    public class MemoryDbObjectRepository : IDbObjectRepository
+    public class MemoryDbObjectRepository : IRepository<DbObject>
     {
         public DbObject GetOne(string id)
         {

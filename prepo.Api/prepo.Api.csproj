@@ -115,6 +115,8 @@
   <ItemGroup>
     <Compile Include="App_Start\IocConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\DefaultController.cs" />
+    <Compile Include="Controllers\PersonasController.cs" />
     <Compile Include="Controllers\ResourceApiController.cs" />
     <Compile Include="Controllers\RootController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
@@ -125,14 +127,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\HalCollectionResource.cs" />
     <Compile Include="Resources\HalItemResource.cs" />
+    <Compile Include="Resources\PersonaCollectionResource.cs" />
+    <Compile Include="Resources\PersonaResource.cs" />
     <Compile Include="Resources\ResourceLink.cs" />
     <Compile Include="Resources\RootResource.cs" />
     <Compile Include="Resources\UserResource.cs" />
-    <Compile Include="Resources\UsersResource.cs" />
-    <Compile Include="Repositories\RepositoryFactory.cs" />
-    <Compile Include="Repositories\ResourceRepository.cs" />
-    <Compile Include="Repositories\RootResourceRepository.cs" />
-    <Compile Include="Repositories\UserResourceRepository.cs" />
+    <Compile Include="Resources\UserCollectionResource.cs" />
+    <Compile Include="Services\PersonaResourceRepository.cs" />
+    <Compile Include="Services\ResourceRepository.cs" />
+    <Compile Include="Services\RootResourceRepository.cs" />
+    <Compile Include="Services\UserResourceRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
@@ -148,7 +152,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

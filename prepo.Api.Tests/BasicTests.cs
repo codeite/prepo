@@ -26,7 +26,8 @@ namespace prepo.Api.Tests
             {
                 '_links': { 
                     'self': {'href': '/'},
-                    'users': {'href': '/users'}
+                    'users': {'href': '/users'},
+                    'personas': {'href': '/personas'}
                 }
             }");
         }

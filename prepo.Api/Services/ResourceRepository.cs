@@ -10,11 +10,11 @@ namespace prepo.Api.Services
         where TItemResource : HalItemResource<TDbo>
         where TDbo : DbObject
     {
-        private readonly IRepositoryFactory _repositoryFactory;
+        private readonly IRepository<TDbo> _repository;
 
-        public ResourceRepository(IRepositoryFactory repositoryFactory)
+        public ResourceRepository(IRepository<TDbo> repository)
         {
-            _repositoryFactory = repositoryFactory;
+            _repository = repository;
         }
 
         public TCollectionResource GetResource()
@@ -28,8 +28,7 @@ namespace prepo.Api.Services
 
             if (count.HasValue && count.Value > 0)
             {
-                var repo = _repositoryFactory.RepositoryFor<TDbo>();
-                resource.Items = repo.GetMany(page ?? 1, count.Value);
+                resource.Items = _repository.GetMany(page ?? 1, count.Value);
             }
 
             return resource;
@@ -42,9 +41,7 @@ namespace prepo.Api.Services
 
         public TItemResource GetById(string id)
         {
-            var repo = _repositoryFactory.RepositoryFor<TDbo>();
-
-            var item = repo.GetOne(id);
+            var item = _repository.GetOne(id);
 
             if (item != null)
             {
@@ -56,7 +53,6 @@ namespace prepo.Api.Services
 
         public void SaveItem(string id, TItemResource userItemResource)
         {
-            var repo = _repositoryFactory.RepositoryFor<TDbo>();
             var user = userItemResource.Instance;
 
             if (id != null && id != user.Id)
@@ -64,18 +60,17 @@ namespace prepo.Api.Services
                 throw new Exception("ID miss match");
             }
 
-            repo.Put(user);
+            _repository.Put(user);
         }
 
         public void DeleteAll()
         {
-            _repositoryFactory.RepositoryFor<TDbo>().DeleteAll();
+            _repository.DeleteAll();
         }
 
         public void Delete(string id)
         {
-            var repo = _repositoryFactory.RepositoryFor<TDbo>();
-            repo.Delete(id);
+            _repository.Delete(id);
         }
     }
 }

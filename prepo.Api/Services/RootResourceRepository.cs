@@ -6,7 +6,8 @@ namespace prepo.Api.Services
 {
     public class RootResourceRepository : ResourceRepository<RootResource, HalItemResource<DbObject>, DbObject> 
     {
-        public RootResourceRepository(IRepositoryFactory repositoryFactory) : base(repositoryFactory)
+        public RootResourceRepository(IRepository<DbObject> repository) 
+            : base(repository)
         {
         }
     }

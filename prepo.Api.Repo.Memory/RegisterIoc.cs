@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using prepo.Api.Contracts.Models;
 using prepo.Api.Contracts.Services;
 
 namespace prepo.Api.Repo.Memory
@@ -7,8 +8,9 @@ namespace prepo.Api.Repo.Memory
     {
         public static void Register(ContainerBuilder builder)
         {
-            builder.RegisterType<MemoryUserRepository>().As<IUserRepository>();
-            builder.RegisterType<MemoryDbObjectRepository>().As<IDbObjectRepository>();
+            builder.RegisterType<MemoryDbObjectRepository>().As<IRepository<DbObject>>();
+            builder.RegisterType<MemoryRepository<PrepoUser>>().As<IRepository<PrepoUser>>();
+            builder.RegisterType<MemoryRepository<PrepoPersona>>().As<IRepository<PrepoPersona>>();
         }
     }
 }

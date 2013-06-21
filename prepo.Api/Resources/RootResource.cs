@@ -12,7 +12,8 @@ namespace prepo.Api.Resources
 
         public override IEnumerable<ResourceLink> GetRelatedResources()
         {
-            yield return new ResourceLink("users", UsersResource.Self);
+            yield return new ResourceLink("users", UserCollectionResource.Self);
+            yield return new ResourceLink("personas", PersonaCollectionResource.Self);
         }
     }
 }

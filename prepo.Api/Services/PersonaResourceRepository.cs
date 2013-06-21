@@ -4,9 +4,9 @@ using prepo.Api.Resources;
 
 namespace prepo.Api.Services
 {
-    public class UserResourceRepository : ResourceRepository<UserCollectionResource, UserResource, PrepoUser>
+    public class PersonaResourceRepository : ResourceRepository<PersonaCollectionResource, PersonaResource, PrepoPersona>
     {
-        public UserResourceRepository(IRepository<PrepoUser> repository)
+        public PersonaResourceRepository(IRepository<PrepoPersona> repository)
             : base(repository)
         {
         }
