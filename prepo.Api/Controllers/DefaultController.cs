@@ -17,7 +17,7 @@ namespace prepo.Api.Controllers
             _repository = repository;
         }
 
-        protected override TCollection GetResourceCollection(int? page, int? count)
+        protected override TCollection GetResourceCollection(int? page, int count = 10)
         {
             return _repository.GetCollectionResource(page, count);
         }

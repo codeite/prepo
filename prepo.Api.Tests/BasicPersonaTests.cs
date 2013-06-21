@@ -42,6 +42,7 @@ namespace prepo.Api.Tests
                     'self': {'href': '/personas'},
                     'persona': {'href': '/personas/{id}'},
                     'first': {'href': '/personas?page=1&count=10'},
+                    'next': {'href': '/personas?page=2&count=10'},
                     'page': {'href': '/personas?page={page}&count={count}'},
                     'personas':[
                         { 'href': '/personas/1'},
@@ -90,6 +91,8 @@ namespace prepo.Api.Tests
                     'persona': {'href': '/personas/{id}'},
                     'first': {'href': '/personas?page=1&count=10'},
                     'page': {'href': '/personas?page={page}&count={count}'},
+                    'next': {'href': '/personas?page=3&count=5'},
+                    'prev': {'href': '/personas?page=1&count=5'},
                     'personas':[
                         { 'href': '/personas/6'},
                         { 'href': '/personas/7'},

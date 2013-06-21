@@ -56,6 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiResource.cs" />
     <Compile Include="JsonPath.cs" />
     <Compile Include="JsonPathX.cs" />
     <Compile Include="PrepoRestClient.cs" />

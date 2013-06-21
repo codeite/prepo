@@ -24,17 +24,19 @@ namespace prepo.Api.Services
 
         public TCollectionResource GetCollectionResource(int? page, int? count)
         {
-            var resource = CreateResource();
+            var resource = CreateResource(page, count);
 
-            if (count.HasValue && count.Value > 0)
+            if (page.HasValue && page.Value > 0)
             {
-                resource.Items = _repository.GetMany(page ?? 1, count.Value);
+                resource.Page = page.Value;
+                resource.Count = count ?? 10;
+                resource.Items = _repository.GetMany(page.Value, count ?? 10);
             }
 
             return resource;
         }
 
-        private TCollectionResource CreateResource()
+        private TCollectionResource CreateResource(int? page, int? count)
         {
             return Activator.CreateInstance<TCollectionResource>();
         }

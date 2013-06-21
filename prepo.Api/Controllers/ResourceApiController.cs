@@ -97,7 +97,7 @@ namespace prepo.Api.Controllers
         where TCollection : HalCollectionResource<TDbo>
         where TDbo : DbObject
     {
-        protected virtual TCollection GetResourceCollection(int? page, int? count)
+        protected virtual TCollection GetResourceCollection(int? page, int count = 10)
         {
             return null;
         }
@@ -107,7 +107,7 @@ namespace prepo.Api.Controllers
             return false;
         }
 
-        public virtual HttpResponseMessage Get(int? page = null, int? count = null)
+        public virtual HttpResponseMessage Get(int? page = null, int count = 10)
         {
             var resource = GetResourceCollection(page, count);
 
@@ -117,7 +117,7 @@ namespace prepo.Api.Controllers
             return response;
         }
 
-        public virtual HttpResponseMessage Head(int? page = null, int? count = null)
+        public virtual HttpResponseMessage Head(int? page = null, int count = 10)
         {
             return Get(page, count);
         }

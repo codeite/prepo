@@ -8,7 +8,11 @@ namespace prepo.Api.Resources
 {
     public abstract class HalCollectionResource<TDbo> : HalResource
     {
-        private readonly ResourceLink _self;
+        protected readonly ResourceLink _self;
+
+        public int? Page { get; set; }
+
+        public int Count { get; set; }
 
         public IEnumerable<TDbo> Items { get; set; }
 
