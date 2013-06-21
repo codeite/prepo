@@ -4,7 +4,7 @@ using prepo.Api.Services;
 
 namespace prepo.Api.Controllers
 {
-    public abstract class DefaultController <TCollection, TItem, TDbo>
+    public abstract class DefaultController<TCollection, TItem, TDbo>
         : ResourceApiController<TCollection, TItem, TDbo>
         where TCollection : HalCollectionResource<TDbo>
         where TItem : HalItemResource<TDbo>
@@ -27,18 +27,20 @@ namespace prepo.Api.Controllers
             return _repository.GetById(id);
         }
 
-        protected override string SaveResource(string id, TItem content)
+        protected override SaveResourceResult SaveResource(string id, TItem content)
         {
             if (content == null)
             {
                 _repository.Delete(id);
-                return "";
+                return new SaveResourceResult(SaveResourceResult.ActionPerfomedOptions.Deleted);
             }
             else
             {
-                _repository.SaveItem(id, content);
-
-                return content.SelfLink.Href;
+                var updated = _repository.SaveItem(id, content);
+                return new SaveResourceResult(updated ? SaveResourceResult.ActionPerfomedOptions.Updated : SaveResourceResult.ActionPerfomedOptions.Created)
+                {
+                    Location = content.SelfLink.Href
+                };
             }
         }
     }

@@ -7,7 +7,7 @@ namespace prepo.Api.Contracts.Services
     {
         T GetOne(string id);
         IEnumerable<T> GetMany(int page, int count);
-        void Put(T item);
+        bool Put(T item);
         string Post(T item);
         void Delete(string id);
         void DeleteAll();

@@ -53,7 +53,7 @@ namespace prepo.Api.Services
             return null;
         }
 
-        public void SaveItem(string id, TItemResource userItemResource)
+        public bool SaveItem(string id, TItemResource userItemResource)
         {
             var user = userItemResource.Instance;
 
@@ -62,7 +62,7 @@ namespace prepo.Api.Services
                 throw new Exception("ID miss match");
             }
 
-            _repository.Put(user);
+            return _repository.Put(user);
         }
 
         public void DeleteAll()

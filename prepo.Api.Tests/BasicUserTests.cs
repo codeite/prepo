@@ -65,7 +65,7 @@ namespace prepo.Api.Tests
             var realLast = last ?? first;
             for (var i = first; i <= realLast; i++)
             {
-                usersRd.PutToRel("user", new {id = i}, new UserBuilder(i).BuildAsContent());
+                usersRd.PutToRel("user", new { id = i }, new UserBuilder(i).BuildAsContent());
             }
         }
 
@@ -136,7 +136,7 @@ namespace prepo.Api.Tests
             AddUsers(usersRd, 15);
 
             // Act
-            var users = usersRd.FollowRel("user", new {id = 15});
+            var users = usersRd.FollowRel("user", new { id = 15 });
 
             // Assert
             Console.WriteLine(users.Body);
@@ -200,7 +200,7 @@ namespace prepo.Api.Tests
 
             // Act
 
-            var user = users.FollowRel("user", new {id = 65});
+            var user = users.FollowRel("user", new { id = 65 });
 
             // Assert
             Console.WriteLine(user.Body);

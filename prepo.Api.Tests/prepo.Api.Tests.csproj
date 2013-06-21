@@ -68,6 +68,7 @@
     <Compile Include="JsonAssertionHelper.cs" />
     <Compile Include="PersonaBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SubtlyUserTests.cs" />
     <Compile Include="UserBuilder.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -48,11 +48,19 @@ namespace prepo.Client
 
         public string PutToRel(string name, object arguments, BodyContent content)
         {
+            Response nullResponse;
+            return PutToRel(name, arguments, content, out nullResponse);
+        }
+
+        public string PutToRel(string name, object arguments, BodyContent content, out Response response)
+        {
             var linkHrefTemplate = Json["_links"][name]["href"] as string;
 
             var href = ResolveTemplate(linkHrefTemplate, arguments);
 
-            return _response.Put(href, content).Location;
+            response = _response.Put(href, content);
+
+            return response.Location;
         }
 
         public string PostToRel(string name, object arguments, BodyContent content)

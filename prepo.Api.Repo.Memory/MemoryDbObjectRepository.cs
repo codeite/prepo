@@ -9,6 +9,22 @@ namespace prepo.Api.Repo.Memory
 {
     public class MemoryDbObjectRepository : IRepository<DbObject>
     {
+        private static readonly Dictionary<Type, dynamic>  _userStores = new Dictionary<Type, dynamic>();
+
+        public static Dictionary<string,T> StoreFor<T>()
+        {
+            var type = typeof (T);
+            lock (_userStores)
+            {
+                if (!_userStores.ContainsKey(type))
+                {
+                    _userStores[type] = new Dictionary<string, T>();
+                }
+
+                return _userStores[type];
+            }
+        }
+
         public DbObject GetOne(string id)
         {
             throw new NotImplementedException();
@@ -19,7 +35,7 @@ namespace prepo.Api.Repo.Memory
             throw new NotImplementedException();
         }
 
-        public void Put(DbObject item)
+        public bool Put(DbObject item)
         {
             throw new NotImplementedException();
         }
@@ -36,7 +52,10 @@ namespace prepo.Api.Repo.Memory
 
         public void DeleteAll()
         {
-            MemoryRepository<PrepoUser>.Store.Clear();
+            foreach (var userStore in _userStores.Values)
+            {
+                userStore.Clear();
+            }
         }
 
         public IQueryable<DbObject> Query()

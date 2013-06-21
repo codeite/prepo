@@ -8,48 +8,50 @@ namespace prepo.Api.Repo.Memory
     public class MemoryRepository<T> : IRepository<T>
         where T : DbObject
     {
-        public static readonly Dictionary<string, T> Store = new Dictionary<string, T>();
+        private static readonly Dictionary<string, T> _store = MemoryDbObjectRepository.StoreFor<T>();
 
         public T GetOne(string id)
         {
             T value;
-            Store.TryGetValue(id, out value);
+            _store.TryGetValue(id, out value);
             return value;
         }
 
         public IEnumerable<T> GetMany(int page, int count)
         {
             var start = (page - 1) * count;
-            return Store.Values.Skip(start).Take(count).ToList();
+            return _store.Values.Skip(start).Take(count).ToList();
         }
 
-        public void Put(T item)
+        public bool Put(T item)
         {
-            Store[item.Id] = item;
+            var exists = _store.ContainsKey(item.Id);
+            _store[item.Id] = item;
+            return exists;
         }
 
         public string Post(T item)
         {
-            item.Id = (Store.Keys.Select(int.Parse).Max() + 1).ToString();
+            item.Id = (_store.Keys.Select(int.Parse).Max() + 1).ToString();
 
-            Store[item.Id] = item;
+            _store[item.Id] = item;
 
             return item.Id;
         }
 
         public void Delete(string id)
         {
-            Store.Remove(id);
+            _store.Remove(id);
         }
 
         public void DeleteAll()
         {
-            Store.Clear();
+            _store.Clear();
         }
 
         public IQueryable<T> Query()
         {
-            return Store.Values.AsQueryable();
+            return _store.Values.AsQueryable();
         }
     }
 }
