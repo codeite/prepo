@@ -3,14 +3,12 @@ using prepo.Api.Contracts.Models;
 
 namespace prepo.Api.Resources
 {
-    public class UsersResource : HalResource
+    public class UsersResource : HalCollectionResource<PrepoUser>
     {
         public const string Self = RootResource.Self + "users";
         public UsersResource()
             : base(Self)
         { }
-
-        public IEnumerable<PrepoUser> Users { get; set; }
 
         public override IEnumerable<ResourceLink> GetRelatedResources()
         {
@@ -18,9 +16,9 @@ namespace prepo.Api.Resources
             yield return new ResourceLink("first", Self+"?page=1&count=10");
             yield return new ResourceLink("page", Self+"?page={page}&count={count}");
 
-            if (Users != null)
+            if (Items != null)
             {
-                foreach (var user in Users)
+                foreach (var user in Items)
                 {
                     yield return new ResourceLink("users", Self+"/"+user.Id);
                 }

@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using prepo.Api.Contracts.Models;
 
 namespace prepo.Api.Resources
 {
-    public class RootResource : HalResource
+    public class RootResource : HalCollectionResource<DbObject>
     {
         public const string Self = "/";
         public RootResource()

@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Web;
-using prepo.Api.Contracts.Models;
 
 namespace prepo.Api.Resources
 {
-    public abstract class HalResource
+    public abstract class HalCollectionResource<TDbo> : HalResource
     {
         private readonly ResourceLink _self;
 
-        protected HalResource(string selfHref)
+        public IEnumerable<TDbo> Items { get; set; }
+
+        protected HalCollectionResource(string selfHref)
         {
             _self = new ResourceLink("self", selfHref);
         }
@@ -77,46 +77,9 @@ namespace prepo.Api.Resources
         }
     }
 
-    public abstract class HalResource<T> 
-        : HalResource
-        where T : DbObject
+    public interface HalResource
     {
-        private readonly T _instance;
-
-        protected HalResource(string selfHref, T instance) : base(selfHref)
-        {
-            _instance = instance;
-        }
-
-        public T Instance
-        {
-            get { return _instance; }
-        }
-
-        protected override void AddProperties(Dictionary<string, object> dictionary)
-        {
-            var type = typeof (T);
-
-            foreach (var propertyInfo in type.GetProperties())
-            {
-                var name = FixName(propertyInfo.Name);
-                var value = propertyInfo.GetValue(_instance);
-
-                dictionary.Add(name, value);
-            }
-        }
-
-        private string FixName(string name)
-        {
-            if (name.Length > 0)
-            {
-                var first = name[0].ToString(CultureInfo.InvariantCulture).ToLower()[0];
-
-                name = first + name.Substring(1);
-            }
-
-            return name;
-        }
+        object ToDynamicJson();
     }
 
     /*

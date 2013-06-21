@@ -5,6 +5,7 @@ using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
 using prepo.Api.Contracts.Services;
+using prepo.Api.Repo.Memory;
 using prepo.Api.Services;
 
 namespace prepo.Api
@@ -17,6 +18,7 @@ namespace prepo.Api
 
             RegisterControllers(builder);
             RegisterServices(builder);
+            MemoryRepoRegisterIoc.Register(builder);
 
             var container = builder.Build();
 
@@ -37,9 +39,10 @@ namespace prepo.Api
 
         private static void RegisterServices(ContainerBuilder builder)
         {
-            builder.RegisterType<ResourceRepository>();
+            builder.RegisterType<UserResourceRepository>();
+            builder.RegisterType<RootResourceRepository>();
+
             builder.RegisterType<RepositoryFactory>().As<IRepositoryFactory>();
-            builder.RegisterType<UserRepository>().As<IUserRepository>();
         }
     }
 }

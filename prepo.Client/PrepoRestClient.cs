@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Codeite.Core.Json;
@@ -63,16 +64,7 @@ namespace prepo.Client
         {
             var linkHrefTemplate = Json["_links"][name]["href"] as string;
 
-            var template = new UriTemplate(linkHrefTemplate);
-
-            var args = ToDictionary(arguments);
-
-            foreach (var arg in args)
-            {
-                template.SetParameter(arg.Key, arg.Value);
-            }
-
-            var href = template.Resolve();
+            var href = ResolveTemplate(linkHrefTemplate, arguments);
 
             return new ApiResource(_response.Get(href));
         }
@@ -81,6 +73,57 @@ namespace prepo.Client
         {
             var linkHrefTemplate = Json["_links"][name]["href"] as string;
 
+            var href = ResolveTemplate(linkHrefTemplate, arguments);
+
+            return _response.Put(href, content).Location;
+        }
+
+        public string PostToRel(string name, object arguments, BodyContent content)
+        {
+            var linkHrefTemplate = Json["_links"][name]["href"] as string;
+
+            var href = ResolveTemplate(linkHrefTemplate, arguments);
+
+            return _response.Post(href, content).Location;
+        }
+
+        public string Post(BodyContent content)
+        {
+            return _response.Post("", content).Location;
+        }
+
+        public void Delete()
+        {
+            _response.Delete("");
+        }
+
+        public bool DeleteRel(string name, object arguments)
+        {
+            var linkHrefTemplate = Json["_links"][name]["href"] as string;
+
+            var href = ResolveTemplate(linkHrefTemplate, arguments);
+
+            return _response.Delete(href).StatusCode == HttpStatusCode.OK;
+        }
+
+        private IDictionary<string, string> ToDictionary(object arguments)
+        {
+            if (arguments == null)
+            {
+                return new Dictionary<string, string>(); 
+            }
+
+            var type = arguments.GetType();
+
+            return type.GetProperties()
+                .ToDictionary(
+                    p => p.Name, 
+                    p => p.GetValue(arguments).ToString());
+
+        }
+
+        private string ResolveTemplate(string linkHrefTemplate, object arguments)
+        {
             var template = new UriTemplate(linkHrefTemplate);
 
             var args = ToDictionary(arguments);
@@ -91,26 +134,7 @@ namespace prepo.Client
             }
 
             var href = template.Resolve();
-
-            return _response.Put(href, content).Location;
-        }
-
-        public string PostToRel(string name, BodyContent content)
-        {
-            var linkHref = Json["_links"][name]["href"] as string;
-
-            return _response.Post(linkHref, content).Location;
-        }
-
-        private IEnumerable<KeyValuePair<string, string>> ToDictionary(object arguments)
-        {
-            var type = arguments.GetType();
-
-            return type.GetProperties()
-                .ToDictionary(
-                    p => p.Name, 
-                    p => p.GetValue(arguments).ToString());
-
+            return href;
         }
     }
 }

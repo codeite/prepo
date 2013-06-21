@@ -10,6 +10,7 @@ namespace prepo.Api.Contracts.Services
         void Put(T item);
         string Post(T item);
         void Delete(string id);
-        IQueryable Query();
+        void DeleteAll();
+        IQueryable<T> Query();
     }
 }

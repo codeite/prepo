@@ -123,14 +123,16 @@
     </Compile>
     <Compile Include="Infrastructure\HalJsonMediaTypeFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\HalResource.cs" />
+    <Compile Include="Resources\HalCollectionResource.cs" />
+    <Compile Include="Resources\HalItemResource.cs" />
     <Compile Include="Resources\ResourceLink.cs" />
     <Compile Include="Resources\RootResource.cs" />
     <Compile Include="Resources\UserResource.cs" />
     <Compile Include="Resources\UsersResource.cs" />
-    <Compile Include="Services\RepositoryFactory.cs" />
-    <Compile Include="Services\ResourceRepository.cs" />
-    <Compile Include="Services\UserRepository.cs" />
+    <Compile Include="Repositories\RepositoryFactory.cs" />
+    <Compile Include="Repositories\ResourceRepository.cs" />
+    <Compile Include="Repositories\RootResourceRepository.cs" />
+    <Compile Include="Repositories\UserResourceRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
@@ -146,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -154,6 +157,10 @@
     <ProjectReference Include="..\prepo.Api.Contracts\prepo.Api.Contracts.csproj">
       <Project>{679DBCBC-8F4B-4819-870A-970489CB21CB}</Project>
       <Name>prepo.Api.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\prepo.Api.Repo.Memory\prepo.Api.Repo.Memory.csproj">
+      <Project>{BEF72D16-0681-4317-BA6D-5758B774CBEC}</Project>
+      <Name>prepo.Api.Repo.Memory</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

@@ -2,14 +2,16 @@
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using prepo.Api.Contracts.Models;
 using prepo.Api.Resources;
 
 namespace prepo.Api.Controllers
 {
-    public abstract class ResourceApiController<TCollection, TItem>
-        : ResourceApiController<TCollection>
-        where TCollection : HalResource
-        where TItem : HalResource
+    public abstract class ResourceApiController<TCollection, TItem, TDbo>
+        : ResourceApiController<TCollection, TDbo>
+        where TCollection : HalCollectionResource<TDbo>
+        where TItem : HalCollectionResource<TDbo>
+        where TDbo : DbObject
     {
         protected virtual TItem GetResource(string id)
         {
@@ -76,18 +78,33 @@ namespace prepo.Api.Controllers
             }
         }
 
-        public virtual HttpResponseMessage Delete()
+        public virtual HttpResponseMessage Delete(string id)
         {
-            return new HttpResponseMessage(HttpStatusCode.NotFound);
+            var location = SaveResource(id, null);
+
+            if (location == null)
+            {
+                return new HttpResponseMessage(HttpStatusCode.MethodNotAllowed);
+            }
+            else
+            {
+                return new HttpResponseMessage(HttpStatusCode.OK);
+            }
         }
     }
 
-    public abstract class ResourceApiController<TCollection> : ApiController
-        where TCollection : HalResource
+    public abstract class ResourceApiController<TCollection, TDbo> : ApiController
+        where TCollection : HalCollectionResource<TDbo>
+        where TDbo : DbObject
     {
         protected virtual TCollection GetResourceCollection(int? page, int? count)
         {
             return null;
+        }
+
+        protected virtual bool DeleteResourceCollection()
+        {
+            return false;
         }
 
         public virtual HttpResponseMessage Get(int? page = null, int? count = null)
@@ -100,10 +117,16 @@ namespace prepo.Api.Controllers
             return response;
         }
 
-        public virtual HttpResponseMessage Head()
+        public virtual HttpResponseMessage Head(int? page = null, int? count = null)
         {
-            return new HttpResponseMessage();
+            return Get(page, count);
         }
 
+        public virtual HttpResponseMessage Delete()
+        {
+            return DeleteResourceCollection() ? 
+                new HttpResponseMessage(HttpStatusCode.OK) : 
+                new HttpResponseMessage(HttpStatusCode.MethodNotAllowed);
+        }
     }
 }

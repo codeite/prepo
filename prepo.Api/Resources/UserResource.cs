@@ -2,7 +2,7 @@
 
 namespace prepo.Api.Resources
 {
-    public class UserResource : HalResource<PrepoUser>
+    public class UserResource : HalItemResource<PrepoUser>
     {
         public const string Self = RootResource.Self + "users/";
 

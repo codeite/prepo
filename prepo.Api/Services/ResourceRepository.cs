@@ -5,7 +5,10 @@ using prepo.Api.Resources;
 
 namespace prepo.Api.Services
 {
-    public class ResourceRepository
+    public class ResourceRepository<TCollectionResource, TItemResource, TDbo>
+        where TCollectionResource : HalCollectionResource<TDbo>
+        where TItemResource : HalItemResource<TDbo>
+        where TDbo : DbObject
     {
         private readonly IRepositoryFactory _repositoryFactory;
 
@@ -14,35 +17,47 @@ namespace prepo.Api.Services
             _repositoryFactory = repositoryFactory;
         }
 
-        public RootResource GetRootResource()
+        public TCollectionResource GetResource()
         {
-            return new RootResource();
+            return GetCollectionResource(null, null);
         }
 
-        public UsersResource GetUserCollectionResource(int? page, int? count)
+        public TCollectionResource GetCollectionResource(int? page, int? count)
         {
-            var resource = new UsersResource();
+            var resource = CreateResource();
 
             if (count.HasValue && count.Value > 0)
             {
-                var repo = _repositoryFactory.RepositoryFor<PrepoUser>();
-                resource.Users = repo.GetMany(page ?? 1, count.Value);
+                var repo = _repositoryFactory.RepositoryFor<TDbo>();
+                resource.Items = repo.GetMany(page ?? 1, count.Value);
             }
 
             return resource;
         }
 
-        public UserResource GetUser(string id)
+        private TCollectionResource CreateResource()
         {
-            var resource = new UserResource(new PrepoUser(id));
-
-            return resource;
+            return Activator.CreateInstance<TCollectionResource>();
         }
 
-        public void SaveUser(string id, UserResource userResource)
+        public TItemResource GetById(string id)
         {
-            var repo = _repositoryFactory.RepositoryFor<PrepoUser>();
-            var user = userResource.Instance;
+            var repo = _repositoryFactory.RepositoryFor<TDbo>();
+
+            var item = repo.GetOne(id);
+
+            if (item != null)
+            {
+                return Activator.CreateInstance(typeof(TItemResource), item) as TItemResource;
+            }
+
+            return null;
+        }
+
+        public void SaveItem(string id, TItemResource userItemResource)
+        {
+            var repo = _repositoryFactory.RepositoryFor<TDbo>();
+            var user = userItemResource.Instance;
 
             if (id != null && id != user.Id)
             {
@@ -50,6 +65,17 @@ namespace prepo.Api.Services
             }
 
             repo.Put(user);
+        }
+
+        public void DeleteAll()
+        {
+            _repositoryFactory.RepositoryFor<TDbo>().DeleteAll();
+        }
+
+        public void Delete(string id)
+        {
+            var repo = _repositoryFactory.RepositoryFor<TDbo>();
+            repo.Delete(id);
         }
     }
 }

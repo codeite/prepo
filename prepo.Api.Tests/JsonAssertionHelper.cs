@@ -1,6 +1,7 @@
 ﻿using System;
 using Codeite.Core.Json;
-using Shouldly;
+using FluentAssertions;
+using FluentAssertions.Primitives;
 
 namespace prepo.Api.Tests
 {
@@ -30,7 +31,7 @@ namespace prepo.Api.Tests
                 throw new Exception("Actual JSON invalid, " + e.Message + "\n" + actual);
             }
 
-            actualCannonical.ShouldBe(expectedCannonical);
+            actualCannonical.Should().Be(expectedCannonical);
         }
     }
 }
