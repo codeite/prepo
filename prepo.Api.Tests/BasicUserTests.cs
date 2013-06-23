@@ -157,13 +157,22 @@ namespace prepo.Api.Tests
             var client = new PrepoRestClient();
 
             // Act
-            var location = client
+            var user = client
                 .GetRoot()
                 .FollowRel("users")
                 .PutToRel("user", new { id = 22 }, new JsonBodyContent("{'id':22}"));
 
             // Assert
-            location.Should().Be("http://dev.prepo.codeite.com/users/22");
+            user.Response.Location.Should().Be("http://dev.prepo.codeite.com/users/22");
+            Console.WriteLine(user.Body);
+            user.Body.ShouldBeJson(@"
+            {
+                '_links': { 
+                    'self': {'href': '/users/22'}
+                },
+                'id' : '22',
+                'name' : 'Number 22'
+            }");
         }
 
         [Test]
@@ -173,12 +182,12 @@ namespace prepo.Api.Tests
             var client = new PrepoRestClient();
 
             // Act
-            var location = client
+            var user = client
                 .GetRoot()
                 .PostToRel("users", null, new JsonBodyContent("{'id':77}"));
 
             // Assert
-            location.Should().Be("http://dev.prepo.codeite.com/users/77");
+            user.Location.Should().Be("http://dev.prepo.codeite.com/users/77");
         }
 
         [Test]
@@ -192,19 +201,19 @@ namespace prepo.Api.Tests
                 .FollowRel("users");
 
             // Act
-            var location = users.PutToRel("user", new { id = 65 }, userResource);
+            var user = users.PutToRel("user", new { id = 65 }, userResource);
 
             // Assert
-            location.Should().Be("http://dev.prepo.codeite.com/users/65");
+            user.Response.Location.Should().Be("http://dev.prepo.codeite.com/users/65");
 
 
             // Act
 
-            var user = users.FollowRel("user", new { id = 65 });
+            var userGet = users.FollowRel("user", new { id = 65 });
 
             // Assert
-            Console.WriteLine(user.Body);
-            user.Body.ShouldBeJson(@"
+            Console.WriteLine(userGet.Body);
+            userGet.Body.ShouldBeJson(@"
             {
                 '_links': { 
                     'self': {'href': '/users/65'}
@@ -212,6 +221,42 @@ namespace prepo.Api.Tests
                 'id' : '65',
                 'name' : 'Number 65'
             }");
+        }
+
+        [Test]
+        public void PutRespondsWithResource()
+        {
+            // Arrange
+            var userResource = new UserBuilder(65).BuildAsContent();
+            var client = new PrepoRestClient();
+            var users = client
+                .GetRoot()
+                .FollowRel("users");
+
+            // Act
+            var userFromPut = users.PutToRel("user", new { id = 65 }, userResource);
+            var userFromGet = users.FollowRel("user", new { id = 65 });
+
+            // Assert
+            userFromPut.Body.ShouldBeEquivalentTo(userFromGet.Body);
+        }
+        
+        [Test]
+        public void PostRespondsWithResource()
+        {
+            // Arrange
+            var userResource = new UserBuilder(66).BuildAsContent();
+            var client = new PrepoRestClient();
+            var users = client
+                .GetRoot()
+                .FollowRel("users");
+
+            // Act
+            var userFromPost = users.Post(userResource);
+            var userFromGet = users.FollowRel("user", new { id = 66 });
+
+            // Assert
+            userFromPost.Body.ShouldBeEquivalentTo(userFromGet.Body);
         }
 
         [Test]
@@ -225,7 +270,7 @@ namespace prepo.Api.Tests
                 .FollowRel("users");
 
             // Act
-            var location = users.Post(userResource);
+            var location = users.Post(userResource).Location;
 
             // Assert
             location.Should().Be("http://dev.prepo.codeite.com/users/96");

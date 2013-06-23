@@ -65,7 +65,7 @@ namespace prepo.Api.Tests
             var realLast = last ?? first;
             for (var i = first; i <= realLast; i++)
             {
-                personasRd.PutToRel("persona", new {id = i}, new PersonaBuilder(i).BuildAsContent());
+                personasRd.PutToRel("persona", new { id = i }, new PersonaBuilder(i).BuildAsContent());
             }
         }
 
@@ -90,9 +90,9 @@ namespace prepo.Api.Tests
                     'self': {'href': '/personas'},
                     'persona': {'href': '/personas/{id}'},
                     'first': {'href': '/personas?page=1&count=10'},
-                    'page': {'href': '/personas?page={page}&count={count}'},
                     'next': {'href': '/personas?page=3&count=5'},
                     'prev': {'href': '/personas?page=1&count=5'},
+                    'page': {'href': '/personas?page={page}&count={count}'},
                     'personas':[
                         { 'href': '/personas/6'},
                         { 'href': '/personas/7'},
@@ -136,7 +136,7 @@ namespace prepo.Api.Tests
             AddPersonas(personasRd, 15);
 
             // Act
-            var personas = personasRd.FollowRel("persona", new {id = 15});
+            var personas = personasRd.FollowRel("persona", new { id = 15 });
 
             // Assert
             Console.WriteLine(personas.Body);
@@ -156,13 +156,21 @@ namespace prepo.Api.Tests
             var client = new PrepoRestClient();
 
             // Act
-            var location = client
+            var persona = client
                 .GetRoot()
                 .FollowRel("personas")
                 .PutToRel("persona", new { id = 22 }, new JsonBodyContent("{'id':22}"));
 
             // Assert
-            location.Should().Be("http://dev.prepo.codeite.com/personas/22");
+            persona.Response.Location.Should().Be("http://dev.prepo.codeite.com/personas/22");
+            Console.WriteLine(persona.Body);
+            persona.Body.ShouldBeJson(@"
+            {
+                '_links': { 
+                    'self': {'href': '/personas/22'}
+                },
+                'id' : '22'
+            }");
         }
 
         [Test]
@@ -172,12 +180,12 @@ namespace prepo.Api.Tests
             var client = new PrepoRestClient();
 
             // Act
-            var location = client
+            var persona = client
                 .GetRoot()
                 .PostToRel("personas", null, new JsonBodyContent("{'id':77}"));
 
             // Assert
-            location.Should().Be("http://dev.prepo.codeite.com/personas/77");
+            persona.Location.Should().Be("http://dev.prepo.codeite.com/personas/77");
         }
 
         [Test]
@@ -191,25 +199,43 @@ namespace prepo.Api.Tests
                 .FollowRel("personas");
 
             // Act
-            var location = personas.PutToRel("persona", new { id = 65 }, personaResource);
+            var persona = personas.PutToRel("persona", new { id = 65 }, personaResource);
 
             // Assert
-            location.Should().Be("http://dev.prepo.codeite.com/personas/65");
+            persona.Response.Location.Should().Be("http://dev.prepo.codeite.com/personas/65");
 
 
             // Act
 
-            var persona = personas.FollowRel("persona", new {id = 65});
+            var personaGet = personas.FollowRel("persona", new { id = 65 });
 
             // Assert
-            Console.WriteLine(persona.Body);
-            persona.Body.ShouldBeJson(@"
+            Console.WriteLine(personaGet.Body);
+            personaGet.Body.ShouldBeJson(@"
             {
                 '_links': { 
                     'self': {'href': '/personas/65'}
                 },
                 'id' : '65'
             }");
+        }
+
+        [Test]
+        public void PutRespondsWithResource()
+        {
+            // Arrange
+            var personaResource = new PersonaBuilder(65).BuildAsContent();
+            var client = new PrepoRestClient();
+            var personas = client
+                .GetRoot()
+                .FollowRel("personas");
+
+            // Act
+            var personaFromPut = personas.PutToRel("persona", new { id = 65 }, personaResource);
+            var personaFromGet = personas.FollowRel("persona", new { id = 65 });
+
+            // Assert
+            personaFromPut.Body.ShouldBeEquivalentTo(personaFromGet.Body);
         }
 
         [Test]
@@ -223,10 +249,10 @@ namespace prepo.Api.Tests
                 .FollowRel("personas");
 
             // Act
-            var location = personas.Post(personaResource);
+            var user = personas.Post(personaResource);
 
             // Assert
-            location.Should().Be("http://dev.prepo.codeite.com/personas/96");
+            user.Location.Should().Be("http://dev.prepo.codeite.com/personas/96");
 
 
             // Act

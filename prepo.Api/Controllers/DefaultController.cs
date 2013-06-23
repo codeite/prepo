@@ -27,19 +27,20 @@ namespace prepo.Api.Controllers
             return _repository.GetById(id);
         }
 
-        protected override SaveResourceResult SaveResource(string id, TItem content)
+        protected override SaveResourceResult<TItem> SaveResource(string id, TItem content)
         {
             if (content == null)
             {
                 _repository.Delete(id);
-                return new SaveResourceResult(SaveResourceResult.ActionPerfomedOptions.Deleted);
+                return new SaveResourceResult<TItem>(SaveResourceResult <TItem>.ActionPerfomedOptions.Deleted);
             }
             else
             {
-                var updated = _repository.SaveItem(id, content);
-                return new SaveResourceResult(updated ? SaveResourceResult.ActionPerfomedOptions.Updated : SaveResourceResult.ActionPerfomedOptions.Created)
+                var updated = _repository.SaveItem(ref id, content);
+                return new SaveResourceResult<TItem>(updated ? SaveResourceResult<TItem>.ActionPerfomedOptions.Updated : SaveResourceResult<TItem>.ActionPerfomedOptions.Created)
                 {
-                    Location = content.SelfLink.Href
+                    Location = content.SelfLink.Href,
+                    Resource = _repository.GetById(id),
                 };
             }
         }

@@ -119,6 +119,7 @@
     <Compile Include="Controllers\PersonasController.cs" />
     <Compile Include="Controllers\ResourceApiController.cs" />
     <Compile Include="Controllers\RootController.cs" />
+    <Compile Include="Controllers\SaveResourceResult.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

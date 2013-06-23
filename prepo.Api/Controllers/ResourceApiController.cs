@@ -18,7 +18,7 @@ namespace prepo.Api.Controllers
             return null;
         }
 
-        protected virtual SaveResourceResult SaveResource(string id, TItem content)
+        protected virtual SaveResourceResult<TItem> SaveResource(string id, TItem content)
         {
             return null;
         }
@@ -45,28 +45,29 @@ namespace prepo.Api.Controllers
                 return new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = "No content" };
             }
 
-            var location = SaveResource(id, content);
-            if (location == null)
+            var saveResourceResult = SaveResource(id, content);
+            if (saveResourceResult == null)
             {
                 return new HttpResponseMessage(HttpStatusCode.MethodNotAllowed);
             }
             else
             {
-                var message = new HttpResponseMessage();
-                switch (location.ActionPerfomed)
+                HttpStatusCode statusCode;
+                switch (saveResourceResult.ActionPerfomed)
                 {
-                    case SaveResourceResult.ActionPerfomedOptions.Created:
-                        message.StatusCode = HttpStatusCode.Created;
+                    case SaveResourceResult<TItem>.ActionPerfomedOptions.Created:
+                        statusCode = HttpStatusCode.Created;
                         break;
-                    case SaveResourceResult.ActionPerfomedOptions.Updated:
-                        message.StatusCode = HttpStatusCode.OK;
+                    case SaveResourceResult<TItem>.ActionPerfomedOptions.Updated:
+                        statusCode = HttpStatusCode.OK;
                         break;
-                    case SaveResourceResult.ActionPerfomedOptions.Deleted:
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                message.Headers.Location = Request.RequestUri;
-                return message;
+                var response = Request.CreateResponse(statusCode, saveResourceResult.Resource); 
+
+                response.Headers.Location = Request.RequestUri;
+                return response;
             }
         }
 
@@ -77,28 +78,29 @@ namespace prepo.Api.Controllers
                 return new HttpResponseMessage(HttpStatusCode.BadRequest) { ReasonPhrase = "No content" };
             }
 
-            var location = SaveResource(null, content);
-            if (location == null)
+            var saveResourceResult = SaveResource(null, content);
+            if (saveResourceResult == null)
             {
                 return new HttpResponseMessage(HttpStatusCode.MethodNotAllowed);
             }
             else
             {
-                var message = new HttpResponseMessage();
-                switch (location.ActionPerfomed)
+                HttpStatusCode statusCode;
+                switch (saveResourceResult.ActionPerfomed)
                 {
-                    case SaveResourceResult.ActionPerfomedOptions.Created:
-                        message.StatusCode = HttpStatusCode.Created;
+                    case SaveResourceResult<TItem>.ActionPerfomedOptions.Created:
+                        statusCode = HttpStatusCode.Created;
                         break;
-                    case SaveResourceResult.ActionPerfomedOptions.Updated:
-                        message.StatusCode = HttpStatusCode.OK;
+                    case SaveResourceResult<TItem>.ActionPerfomedOptions.Updated:
+                        statusCode = HttpStatusCode.OK;
                         break;
-                    case SaveResourceResult.ActionPerfomedOptions.Deleted:
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                message.Headers.Location = new Uri(Request.RequestUri, content.SelfLink.Href);
-                return message;
+
+                var response = Request.CreateResponse(statusCode, saveResourceResult.Resource);
+                response.Headers.Location = new Uri(Request.RequestUri, content.SelfLink.Href);
+                return response;
             }
         }
 
@@ -114,30 +116,6 @@ namespace prepo.Api.Controllers
             {
                 return new HttpResponseMessage(HttpStatusCode.NoContent);
             }
-        }
-    }
-
-    public class SaveResourceResult
-    {
-        private readonly ActionPerfomedOptions _actionPerfomed;
-
-        public SaveResourceResult(ActionPerfomedOptions actionPerfomed)
-        {
-            _actionPerfomed = actionPerfomed;
-        }
-
-        public string Location { get; set; }
-
-        public ActionPerfomedOptions ActionPerfomed
-        {
-            get { return _actionPerfomed; }
-        }
-
-        public enum ActionPerfomedOptions
-        {
-            Deleted,
-            Created,
-            Updated,
         }
     }
 

@@ -4,19 +4,30 @@ namespace prepo.Api.Tests
 {
     public class UserBuilder
     {
-        private int _id;
+        private string _id;
 
         public UserBuilder()
         {
-            _id = 0;
+            _id = "0";
         }
         
         public UserBuilder(int id)
         {
+            _id = id.ToString();
+        } 
+        
+        public UserBuilder(string id)
+        {
             _id = id;
         }
 
-        public UserBuilder WithId(int id)
+        public string Id
+        {
+            get { return _id; }
+            set { _id = value; }
+        }
+
+        public UserBuilder WithId(string id)
         {
             _id = id;
             return this;
@@ -24,7 +35,7 @@ namespace prepo.Api.Tests
 
         public string Build()
         {
-            return "{'id':" + _id + "}";
+            return "{'id':'" + _id + "'}";
         }
 
         public JsonBodyContent BuildAsContent()

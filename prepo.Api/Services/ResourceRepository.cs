@@ -53,16 +53,18 @@ namespace prepo.Api.Services
             return null;
         }
 
-        public bool SaveItem(string id, TItemResource userItemResource)
+        public bool SaveItem(ref string id, TItemResource userItemResource)
         {
-            var user = userItemResource.Instance;
+            var instance = userItemResource.Instance;
 
-            if (id != null && id != user.Id)
+            if (id != null && id != instance.Id)
             {
                 throw new Exception("ID miss match");
             }
 
-            return _repository.Put(user);
+            id = instance.Id;
+
+            return _repository.Put(instance);
         }
 
         public void DeleteAll()

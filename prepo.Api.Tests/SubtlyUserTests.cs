@@ -16,13 +16,10 @@ namespace prepo.Api.Tests
             var usersRt = new PrepoRestClient().GetRoot().FollowRel("users");
             const int userId = 123;
             var user = new UserBuilder(userId).BuildAsContent();
-            Response firstResponse;
-            Response secondsResponse;
 
             // Act
-
-            usersRt.PutToRel("user", new { id = userId }, user, out firstResponse);
-            usersRt.PutToRel("user", new { id = userId }, user, out secondsResponse);
+            var firstResponse = usersRt.PutToRel("user", new { id = userId }, user).Response;
+            var secondsResponse = usersRt.PutToRel("user", new { id = userId }, user).Response;
 
             // Assert
             firstResponse.StatusCode.Should().Be(HttpStatusCode.Created);

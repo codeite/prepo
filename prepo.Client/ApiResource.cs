@@ -29,6 +29,11 @@ namespace prepo.Client
             get { return _json.Value; }
         }
 
+        public Response Response
+        {
+            get { return _response; }
+        }
+
         public ApiResource FollowRel(string name)
         {
             //var linkHref = ("$._links." + name + ".href");
@@ -46,35 +51,29 @@ namespace prepo.Client
             return new ApiResource(_response.Get(href));
         }
 
-        public string PutToRel(string name, object arguments, BodyContent content)
-        {
-            Response nullResponse;
-            return PutToRel(name, arguments, content, out nullResponse);
-        }
-
-        public string PutToRel(string name, object arguments, BodyContent content, out Response response)
+        public ApiResource PutToRel(string name, object arguments, BodyContent content)
         {
             var linkHrefTemplate = Json["_links"][name]["href"] as string;
 
             var href = ResolveTemplate(linkHrefTemplate, arguments);
 
-            response = _response.Put(href, content);
+            var response = _response.Put(href, content);
 
-            return response.Location;
+            return new ApiResource(response);
         }
 
-        public string PostToRel(string name, object arguments, BodyContent content)
+        public Response PostToRel(string name, object arguments, BodyContent content)
         {
             var linkHrefTemplate = Json["_links"][name]["href"] as string;
 
             var href = ResolveTemplate(linkHrefTemplate, arguments);
 
-            return _response.Post(href, content).Location;
+            return _response.Post(href, content);
         }
 
-        public string Post(BodyContent content)
+        public Response Post(BodyContent content)
         {
-            return _response.Post("", content).Location;
+            return _response.Post("", content);
         }
 
         public void Delete()

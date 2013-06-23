@@ -65,6 +65,7 @@
     <Compile Include="BasicPersonaTests.cs" />
     <Compile Include="BasicTests.cs" />
     <Compile Include="BasicUserTests.cs" />
+    <Compile Include="UserChildTests.cs" />
     <Compile Include="JsonAssertionHelper.cs" />
     <Compile Include="PersonaBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -86,6 +87,12 @@
       <Project>{D9C3B6B4-9693-4C89-83A9-7613255323D1}</Project>
       <Name>prepo.Client</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Acceptance\" />
+    <Folder Include="Builders\" />
+    <Folder Include="Helpers\" />
+    <Folder Include="UnitTests\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

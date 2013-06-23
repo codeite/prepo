@@ -1,6 +1,8 @@
-﻿using System.Text;
+﻿using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Everest;
+using Everest.Headers;
 using Everest.Pipeline;
 
 namespace prepo.Client
@@ -15,6 +17,8 @@ namespace prepo.Client
             {
                 baseUri = "http://dev.prepo.codeite.com";
             }
+
+            options = options.Concat(new []{new Accept("application/json"), }).ToArray();
 
             _client = new RestClient(baseUri, options);    
         }
