@@ -62,21 +62,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicPersonaTests.cs" />
-    <Compile Include="BasicTests.cs" />
-    <Compile Include="BasicUserTests.cs" />
-    <Compile Include="UserChildTests.cs" />
-    <Compile Include="JsonAssertionHelper.cs" />
-    <Compile Include="PersonaBuilder.cs" />
+    <Compile Include="Acceptance\BasicPersonaTests.cs" />
+    <Compile Include="Acceptance\BasicTests.cs" />
+    <Compile Include="Acceptance\BasicUserTests.cs" />
+    <Compile Include="Acceptance\SubtlyUserTests.cs" />
+    <Compile Include="Acceptance\UserChildTests.cs" />
+    <Compile Include="Builders\PersonaBuilder.cs" />
+    <Compile Include="Builders\UserBuilder.cs" />
+    <Compile Include="Helpers\JsonAssertionHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SubtlyUserTests.cs" />
-    <Compile Include="UserBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Nuget - usage.txt" />
+    <Content Include="Properties\Nuget - usage.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\prepo.Api\prepo.Api.csproj">
@@ -89,9 +89,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Acceptance\" />
-    <Folder Include="Builders\" />
-    <Folder Include="Helpers\" />
     <Folder Include="UnitTests\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

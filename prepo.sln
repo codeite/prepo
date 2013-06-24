@@ -20,12 +20,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "prepo.Api.Tests", "prepo.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "prepo.Client", "prepo.Client\prepo.Client.csproj", "{D9C3B6B4-9693-4C89-83A9-7613255323D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codeite.Core", "..\Core\Codeite.Core\Codeite.Core.csproj", "{B62E4D7A-1141-4233-BCAD-99EBB29D6800}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{266D7ABE-D6CC-4986-B2F3-09E1A8359001}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codeite.Core.Tests", "..\Core\Codeite.Core.Tests\Codeite.Core.Tests.csproj", "{655BFEAE-F475-4A98-B319-8D468C8923A3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "prepo.Api.Contracts", "prepo.Api.Contracts\prepo.Api.Contracts.csproj", "{679DBCBC-8F4B-4819-870A-970489CB21CB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "prepo.Api.Repo.RavenDB", "prepo.Api.RavenDB\prepo.Api.Repo.RavenDB.csproj", "{EC9E31F8-CF68-47BE-BF60-1B6E0F8FBF70}"
@@ -50,14 +44,6 @@ Global
 		{D9C3B6B4-9693-4C89-83A9-7613255323D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9C3B6B4-9693-4C89-83A9-7613255323D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9C3B6B4-9693-4C89-83A9-7613255323D1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B62E4D7A-1141-4233-BCAD-99EBB29D6800}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B62E4D7A-1141-4233-BCAD-99EBB29D6800}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B62E4D7A-1141-4233-BCAD-99EBB29D6800}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B62E4D7A-1141-4233-BCAD-99EBB29D6800}.Release|Any CPU.Build.0 = Release|Any CPU
-		{655BFEAE-F475-4A98-B319-8D468C8923A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{655BFEAE-F475-4A98-B319-8D468C8923A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{655BFEAE-F475-4A98-B319-8D468C8923A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{655BFEAE-F475-4A98-B319-8D468C8923A3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{679DBCBC-8F4B-4819-870A-970489CB21CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{679DBCBC-8F4B-4819-870A-970489CB21CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{679DBCBC-8F4B-4819-870A-970489CB21CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -73,9 +59,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{B62E4D7A-1141-4233-BCAD-99EBB29D6800} = {266D7ABE-D6CC-4986-B2F3-09E1A8359001}
-		{655BFEAE-F475-4A98-B319-8D468C8923A3} = {266D7ABE-D6CC-4986-B2F3-09E1A8359001}
 	EndGlobalSection
 EndGlobal
