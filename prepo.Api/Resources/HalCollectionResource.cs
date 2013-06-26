@@ -81,11 +81,6 @@ namespace prepo.Api.Resources
         }
     }
 
-    public interface HalResource
-    {
-        object ToDynamicJson();
-    }
-
     /*
     public class PersonaResource : HalResource
     {

@@ -38,7 +38,7 @@ namespace prepo.Api.Services
 
         private TCollectionResource CreateResource(int? page, int? count)
         {
-            return Activator.CreateInstance<TCollectionResource>();
+            return Activator.CreateInstance(typeof(TCollectionResource), "/") as TCollectionResource;
         }
 
         public TItemResource GetById(string id)

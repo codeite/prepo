@@ -8,6 +8,13 @@
             Href = href;
             Title = title;
         }
+        
+        public ResourceLink(string name, HalResource resource, string title = null)
+        {
+            Name = name;
+            Href = resource.SelfLink.Href;
+            Title = title;
+        }
 
         public string Name { get; set; }
         public string Href { get; set; }

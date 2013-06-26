@@ -4,10 +4,13 @@ namespace prepo.Api.Resources
 {
     public class UserResource : HalItemResource<PrepoUser>
     {
-        public const string Self = RootResource.Self + "users/";
-
         public UserResource(PrepoUser user)
-            : base(Self + user.Id, user)
+            : base(RootResource.Self + "users/" + user.Id, user)
         { }
+
+        public override System.Collections.Generic.IEnumerable<ResourceLink> GetRelatedResources()
+        {
+            yield return new ResourceLink("personas", new PersonaCollectionResource(_self.Href));
+        }
     }
 }

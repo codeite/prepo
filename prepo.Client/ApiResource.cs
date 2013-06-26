@@ -24,6 +24,11 @@ namespace prepo.Client
             get { return _response.Body; }
         }
 
+        public dynamic BodyAsJson()
+        {
+            return DynamicJsonObject.ReadJson(_response.Body);
+        }
+
         public Dictionary<string, dynamic> Json
         {
             get { return _json.Value; }

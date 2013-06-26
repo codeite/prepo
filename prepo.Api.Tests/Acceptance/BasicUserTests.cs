@@ -289,7 +289,8 @@ namespace prepo.Api.Tests
             return @"
             {
                 '_links': { 
-                    'self': {'href': '/users/$id$'}
+                    'self': {'href': '/users/$id$'},
+                    'personas': {'href': '/users/$id$/personas'}
                 },
                 'id' : '$id$',
                 'name' : 'Number $id$'

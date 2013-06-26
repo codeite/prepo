@@ -6,14 +6,14 @@ namespace prepo.Api.Resources
     public class RootResource : HalCollectionResource<DbObject>
     {
         public const string Self = "/";
-        public RootResource()
+        public RootResource(string owner)
             : base(Self)
         { }
 
         public override IEnumerable<ResourceLink> GetRelatedResources()
         {
-            yield return new ResourceLink("users", UserCollectionResource.Self);
-            yield return new ResourceLink("personas", PersonaCollectionResource.Self);
+            yield return new ResourceLink("users", new UserCollectionResource(Self));
+            yield return new ResourceLink("personas", new PersonaCollectionResource(Self));
         }
     }
 }
