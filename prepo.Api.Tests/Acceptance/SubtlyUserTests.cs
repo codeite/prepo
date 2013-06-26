@@ -1,10 +1,10 @@
 ﻿using System.Net;
-using Everest;
 using FluentAssertions;
 using NUnit.Framework;
+using prepo.Api.Tests.Builders;
 using prepo.Client;
 
-namespace prepo.Api.Tests
+namespace prepo.Api.Tests.Acceptance
 {
     [TestFixture]
     public class SubtlyUserTests

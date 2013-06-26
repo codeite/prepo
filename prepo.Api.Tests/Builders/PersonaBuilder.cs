@@ -1,6 +1,6 @@
 ﻿using Everest.Content;
 
-namespace prepo.Api.Tests
+namespace prepo.Api.Tests.Builders
 {
     public class PersonaBuilder
     {

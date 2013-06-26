@@ -3,9 +3,11 @@ using Everest.Content;
 using Everest.Status;
 using FluentAssertions;
 using NUnit.Framework;
+using prepo.Api.Tests.Builders;
+using prepo.Api.Tests.Helpers;
 using prepo.Client;
 
-namespace prepo.Api.Tests
+namespace prepo.Api.Tests.Acceptance
 {
     [TestFixture]
     public class BasicUserTests

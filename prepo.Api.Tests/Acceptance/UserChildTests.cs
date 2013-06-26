@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
+using prepo.Api.Tests.Builders;
 using prepo.Client;
 
 namespace prepo.Api.Tests.Acceptance

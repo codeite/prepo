@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
+using prepo.Api.Tests.Helpers;
 using prepo.Client;
 
-namespace prepo.Api.Tests
+namespace prepo.Api.Tests.Acceptance
 {
     [TestFixture]
     public class BasicTests

@@ -1,9 +1,8 @@
 ﻿using System;
 using Codeite.Core.Json;
 using FluentAssertions;
-using FluentAssertions.Primitives;
 
-namespace prepo.Api.Tests
+namespace prepo.Api.Tests.Helpers
 {
     public static class JsonAssertionHelper
     {
