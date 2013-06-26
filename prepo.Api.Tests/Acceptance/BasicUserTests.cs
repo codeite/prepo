@@ -140,14 +140,7 @@ namespace prepo.Api.Tests
 
             // Assert
             Console.WriteLine(users.Body);
-            users.Body.ShouldBeJson(@"
-            {
-                '_links': { 
-                    'self': {'href': '/users/15'}
-                },
-                'id' : '15',
-                'name' : 'Number 15'
-            }");
+            users.Body.ShouldBeJson(MakeUser("15"));
         }
 
         [Test]
@@ -165,14 +158,7 @@ namespace prepo.Api.Tests
             // Assert
             user.Response.Location.Should().Be("http://dev.prepo.codeite.com/users/22");
             Console.WriteLine(user.Body);
-            user.Body.ShouldBeJson(@"
-            {
-                '_links': { 
-                    'self': {'href': '/users/22'}
-                },
-                'id' : '22',
-                'name' : 'Number 22'
-            }");
+            user.Body.ShouldBeJson(MakeUser("22"));
         }
 
         [Test]
@@ -213,14 +199,7 @@ namespace prepo.Api.Tests
 
             // Assert
             Console.WriteLine(userGet.Body);
-            userGet.Body.ShouldBeJson(@"
-            {
-                '_links': { 
-                    'self': {'href': '/users/65'}
-                },
-                'id' : '65',
-                'name' : 'Number 65'
-            }");
+            userGet.Body.ShouldBeJson(MakeUser("65"));
         }
 
         [Test]
@@ -281,14 +260,7 @@ namespace prepo.Api.Tests
 
             // Assert
             Console.WriteLine(user.Body);
-            user.Body.ShouldBeJson(@"
-            {
-                '_links': { 
-                    'self': {'href': '/users/96'}
-                },
-                'id' : '96',
-                'name' : 'Number 96'
-            }");
+            user.Body.ShouldBeJson(MakeUser("96"));
         }
 
         [Test]
@@ -310,6 +282,18 @@ namespace prepo.Api.Tests
             // Assert
             act.ShouldThrow<UnexpectedStatusException>()
                .Where(x => x.StatusCode == 404);
+        }
+        
+        private static string MakeUser(string id)
+        {
+            return @"
+            {
+                '_links': { 
+                    'self': {'href': '/users/$id$'}
+                },
+                'id' : '$id$',
+                'name' : 'Number $id$'
+            }".Replace("$id$", id);
         }
     }
 }
