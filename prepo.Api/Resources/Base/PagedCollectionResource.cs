@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using prepo.Api.Contracts.Models;
 
-namespace prepo.Api.Resources
+namespace prepo.Api.Resources.Base
 {
     public class PagedCollectionResource<T> 
         : HalCollectionResource<T>

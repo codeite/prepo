@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
-namespace prepo.Api.Resources
+namespace prepo.Api.Resources.Base
 {
     public abstract class HalCollectionResource<TDbo> : HalResource
     {

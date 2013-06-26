@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using prepo.Api.Contracts.Models;
+using prepo.Api.Resources.Base;
 
 namespace prepo.Api.Resources
 {

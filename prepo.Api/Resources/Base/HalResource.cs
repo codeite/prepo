@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace prepo.Api.Resources
+namespace prepo.Api.Resources.Base
 {
     public interface HalResource
     {

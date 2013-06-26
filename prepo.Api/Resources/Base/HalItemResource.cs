@@ -2,7 +2,7 @@
 using System.Globalization;
 using prepo.Api.Contracts.Models;
 
-namespace prepo.Api.Resources
+namespace prepo.Api.Resources.Base
 {
     public abstract class HalItemResource<TDbo> 
         : HalCollectionResource<TDbo>

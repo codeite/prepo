@@ -1,4 +1,4 @@
-﻿namespace prepo.Api.Resources
+﻿namespace prepo.Api.Resources.Base
 {
     public class ResourceLink
     {
