@@ -1,81 +1,45 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using prepo.Api.Contracts.Models;
+using prepo.Api.Services;
 
 namespace prepo.Api.Resources.Base
 {
-    public abstract class HalCollectionResource<TDbo> : HalResource
+    public abstract class HalCollectionResource<TDbo> 
+        : HalResource 
+        where TDbo : DbObject
     {
-        protected readonly ResourceLink _self;
+        private readonly string _itemResourceName;
 
-        public int? Page { get; set; }
-
-        public int Count { get; set; }
+        protected HalCollectionResource(IHalResource owner, string resourceName, string itemResourceName)
+            : base(owner, resourceName)
+        {
+            _itemResourceName = itemResourceName;
+        }
 
         public IEnumerable<TDbo> Items { get; set; }
 
-        protected HalCollectionResource(string selfHref)
+        protected abstract IItemResourceFactory<TDbo> ChildFactory { get; }
+
+
+        public override IEnumerable<ResourceLink> GetRelatedResources()
         {
-            _self = new ResourceLink("self", selfHref);
+            yield return new ResourceLink(_itemResourceName, SelfLink.Href + "/{id}");
         }
 
-        public ResourceLink SelfLink
+        public override void ReadChildResources(Stack<string> partsStack)
         {
-            get { return _self; }
-        }
-
-        public object ToDynamicJson()
-        {
-            var root = new Dictionary<string, object>();
-            var links = new Dictionary<string, object>();
-
-            links[_self.Name] = MakeHref(_self.Href);
-            foreach (var relatedResource in GetRelatedResources())
+            if (partsStack.Any())
             {
-                var href = MakeHref(relatedResource.Href);
+                var id = partsStack.Pop();
 
-                if (links.ContainsKey(relatedResource.Name))
-                {
-                    var item = links[relatedResource.Name];
+                Child = ChildFactory.BuildResource(id, this);
 
-                    if (item is IList)
-                    {
-                        (item as IList).Add(href);
-                    }
-                    else
-                    {
-                        links[relatedResource.Name] = new List<object> { item, href };
-                    }
-                }
-                else
-                {
-                    links[relatedResource.Name] = href;
-                }
+                Child.ReadChildResources(partsStack);
             }
-            root["_links"] = links;
-            AddProperties(root);
-            GetEmbededResources();
-            return root;
         }
 
-        protected virtual void AddProperties(Dictionary<string, object> dictionary)
-        {
-            
-        }
-
-        public virtual IEnumerable<ResourceLink> GetRelatedResources()
-        {
-            yield break;
-        }
-
-        public virtual IEnumerable<HalResource> GetEmbededResources()
-        {
-            yield break;
-        }
-
-        private Dictionary<string, object> MakeHref(string value)
-        {
-            return new Dictionary<string, object> {{"href", value}};
-        }
     }
 
     /*

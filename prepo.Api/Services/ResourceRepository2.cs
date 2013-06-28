@@ -1,19 +1,18 @@
 ﻿using System;
 using prepo.Api.Contracts.Models;
 using prepo.Api.Contracts.Services;
-using prepo.Api.Resources;
 using prepo.Api.Resources.Base;
 
 namespace prepo.Api.Services
 {
-    public class ResourceRepository<TCollectionResource, TItemResource, TDbo> 
+    public class ResourceRepository2<TCollectionResource, TItemResource, TDbo> 
         where TCollectionResource : HalResource
         where TItemResource : HalItemResource<TDbo>
         where TDbo : DbObject
     {
         private readonly IRepository<TDbo> _repository;
 
-        public ResourceRepository(IRepository<TDbo> repository)
+        public ResourceRepository2(IRepository<TDbo> repository)
         {
             _repository = repository;
         }

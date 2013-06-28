@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
 using prepo.Api.Controllers;
+using prepo.Api.Resources;
+using prepo.Api.Services;
 
 namespace prepo.Api.Tests.UnitTests
 {
@@ -30,8 +32,8 @@ namespace prepo.Api.Tests.UnitTests
             var head = resource.Head;
 
             // Assert
-            resource.Should().BeOfType<RootResource2>();
-            head.Should().BeOfType<RootResource2>();
+            resource.Should().BeOfType<RootResource>();
+            head.Should().BeOfType<RootResource>();
             resource.Should().BeSameAs(head);
         }
 
@@ -48,10 +50,10 @@ namespace prepo.Api.Tests.UnitTests
             var head = root.Head;
 
             // Assert
-            root.Should().BeOfType<RootResource2>();
-            head.Should().BeOfType<UserCollectionResource2>();
+            root.Should().BeOfType<RootResource>();
+            head.Should().BeOfType<UserCollectionResource>();
 
-            head.Owner.Should().BeOfType<RootResource2>();
+            head.Owner.Should().BeOfType<RootResource>();
             head.Owner.Should().Be(root);
         }
 
@@ -68,10 +70,10 @@ namespace prepo.Api.Tests.UnitTests
             var head = root.Head;
 
             // Assert
-            root.Should().BeOfType<RootResource2>();
-            head.Should().BeOfType<UserItemResource2>();
+            root.Should().BeOfType<RootResource>();
+            head.Should().BeOfType<UserItemResource>();
 
-            var user = head as UserItemResource2;
+            var user = head as UserItemResource;
             user.Id.Should().Be(id);
         }
 
@@ -86,8 +88,8 @@ namespace prepo.Api.Tests.UnitTests
             var head = root.Head;
 
             // Assert
-            root.Should().BeOfType<RootResource2>();
-            head.Should().BeOfType<PersonaCollectionResource2>();
+            root.Should().BeOfType<RootResource>();
+            head.Should().BeOfType<PersonaCollectionResource>();
         }
 
         [TestCase("/users/Sam/personas/MrFantastic", "Sam", "MrFantastic")]
@@ -103,10 +105,10 @@ namespace prepo.Api.Tests.UnitTests
             var head = root.Head;
 
             // Assert
-            root.Should().BeOfType<RootResource2>();
-            head.Should().BeOfType<PersonaItemResource2>();
+            root.Should().BeOfType<RootResource>();
+            head.Should().BeOfType<PersonaItemResource>();
 
-            var persona = head as PersonaItemResource2;
+            var persona = head as PersonaItemResource;
             persona.Id.Should().Be(id);
         }
     }

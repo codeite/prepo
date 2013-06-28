@@ -22,10 +22,16 @@ namespace prepo.Api
             //    defaults: new { id = RouteParameter.Optional }
             //);
 
+            //config.Routes.MapHttpRoute(
+            //   name: "root",
+            //   routeTemplate: "{controller}",
+            //   defaults: new { controller = "Resource", path = RouteParameter.Optional }
+            //);
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "{*path}",
-                defaults: new { controller = "Resource" }
+                defaults: new { controller = "Resource", path = "" }
             );
 
             // Uncomment the following line of code to enable query support for actions with an IQueryable or IQueryable<T> return type.

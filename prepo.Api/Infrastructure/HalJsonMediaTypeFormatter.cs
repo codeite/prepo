@@ -23,19 +23,19 @@ namespace prepo.Api.Infrastructure
 
         public override bool CanReadType(Type type)
         {
-            var cwt = typeof(HalResource).IsAssignableFrom(type);
+            var cwt = typeof(IHalResource).IsAssignableFrom(type);
             return cwt;
         }
 
         public override bool CanWriteType(Type type)
         {
-            var cwt = typeof(HalResource).IsAssignableFrom(type);
+            var cwt = typeof(IHalResource).IsAssignableFrom(type);
             return cwt;
         }
 
         public override void WriteToStream(Type type, object value, Stream writeStream, System.Net.Http.HttpContent content)
         {
-            var halResource = value as HalResource;
+            var halResource = value as IHalResource;
 
             if (halResource == null)
             {

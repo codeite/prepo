@@ -42,6 +42,7 @@ namespace prepo.Api
             builder.RegisterType<RootResourceRepository>();
             builder.RegisterType<UserResourceRepository>();
             builder.RegisterType<PersonaResourceRepository>();
+            builder.RegisterType<ResourceChainBuilder>();
         }
     }
 }

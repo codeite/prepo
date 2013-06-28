@@ -1,20 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using prepo.Api.Contracts.Models;
 using prepo.Api.Resources.Base;
+using prepo.Api.Services;
 
 namespace prepo.Api.Resources
 {
-    public class RootResource : HalCollectionResource<DbObject>
+    public class RootResource : HalItemResource<DbObject>
     {
-        public const string Self = "/";
-        public RootResource(string owner)
-            : base(Self)
-        { }
-
-        public override IEnumerable<ResourceLink> GetRelatedResources()
+        public RootResource()
+            : base("", null, "")
         {
-            yield return new ResourceLink("users", new UserCollectionResource(Self));
-            yield return new ResourceLink("personas", new PersonaCollectionResource(Self));
+        }
+
+        protected override Dictionary<string, IHalResource> ChildResources
+        {
+            get
+            {
+                return new Dictionary<string, IHalResource>
+                {
+                    { UserCollectionResource.CollectionName, new UserCollectionResource(this) },
+                    { PersonaCollectionResource.CollectionName, new PersonaCollectionResource(this) }
+                };
+            }
         }
     }
 }

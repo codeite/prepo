@@ -81,6 +81,10 @@
     <Content Include="Properties\Nuget - usage.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\prepo.Api.Contracts\prepo.Api.Contracts.csproj">
+      <Project>{679dbcbc-8f4b-4819-870a-970489cb21cb}</Project>
+      <Name>prepo.Api.Contracts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\prepo.Api\prepo.Api.csproj">
       <Project>{23345161-6c39-40b8-9851-2501b3a6d61f}</Project>
       <Name>prepo.Api</Name>

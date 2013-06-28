@@ -11,7 +11,7 @@ namespace prepo.Api.Controllers
     public abstract class ResourceApiController<TCollection, TItem, TDbo>
         : ResourceApiController<TCollection, TDbo>
         where TCollection : HalCollectionResource<TDbo>
-        where TItem : HalCollectionResource<TDbo>
+        where TItem : HalItemResource<TDbo>
         where TDbo : DbObject
     {
         protected virtual TItem GetResource(string id)

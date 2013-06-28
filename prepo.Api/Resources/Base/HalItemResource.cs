@@ -1,35 +1,43 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using prepo.Api.Contracts.Models;
 
 namespace prepo.Api.Resources.Base
 {
-    public abstract class HalItemResource<TDbo> 
-        : HalCollectionResource<TDbo>
+    public abstract class HalItemResource<TDbo> : HalResource
         where TDbo : DbObject
     {
         private readonly TDbo _instance;
 
-        protected HalItemResource(string selfHref, TDbo instance) : base(selfHref)
+        protected HalItemResource(string id, IHalResource owner, string resourceName)
+            : base(owner, resourceName)
         {
-            _instance = instance;
+            Id = id;
         }
 
         public TDbo Instance
         {
-            get { return _instance; }
+            get
+            {
+                return null; // _instance.Value; 
+            }
         }
 
         protected override void AddProperties(Dictionary<string, object> dictionary)
         {
-            var type = typeof (TDbo);
-
-            foreach (var propertyInfo in type.GetProperties())
+            if (_instance != null)
             {
-                var name = FixName(propertyInfo.Name);
-                var value = propertyInfo.GetValue(_instance);
+                var type = typeof (TDbo);
 
-                dictionary.Add(name, value);
+                foreach (var propertyInfo in type.GetProperties())
+                {
+                    var name = FixName(propertyInfo.Name);
+                    var value = propertyInfo.GetValue(_instance);
+
+                    dictionary.Add(name, value);
+                }
             }
         }
 
@@ -43,6 +51,32 @@ namespace prepo.Api.Resources.Base
             }
 
             return name;
+        }
+
+        protected abstract Dictionary<string, IHalResource> ChildResources { get; }
+
+        public string Id { get; set; }
+
+        public override void ReadChildResources(Stack<string> partsStack)
+        {
+            if (partsStack.Any())
+            {
+                var directChild = partsStack.Pop().ToLowerInvariant();
+
+                if (!ChildResources.ContainsKey(directChild))
+                {
+                    throw new Exception("Unknown child resource: " + directChild);
+                }
+
+                Child = ChildResources[directChild];
+
+                Child.ReadChildResources(partsStack);
+            }
+        }
+
+        public override IEnumerable<ResourceLink> GetRelatedResources()
+        {
+            return ChildResources.Select(kvp => new ResourceLink(kvp.Key, kvp.Value));
         }
     }
 }
