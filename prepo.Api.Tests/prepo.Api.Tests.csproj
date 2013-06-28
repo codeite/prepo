@@ -71,6 +71,7 @@
     <Compile Include="Builders\UserBuilder.cs" />
     <Compile Include="Helpers\JsonAssertionHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTests\ResourceChainBuilderTests.cs" />
     <Compile Include="UnitTests\UriBuilderHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>

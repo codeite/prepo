@@ -10,16 +10,22 @@ namespace prepo.Api
     {
         public static void Register(HttpConfiguration config)
         {
+            //config.Routes.MapHttpRoute(
+            //    name: "DefaultApi",
+            //    routeTemplate: "{controller}/{id}",
+            //    defaults: new { controller = "Root", id = RouteParameter.Optional }
+            //);
+            
+            //config.Routes.MapHttpRoute(
+            //    name: "ParentDefaultApi",
+            //    routeTemplate: "{parent}/{parentId}/{controller}/{id}",
+            //    defaults: new { id = RouteParameter.Optional }
+            //);
+
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "{controller}/{id}",
-                defaults: new { controller = "Root", id = RouteParameter.Optional }
-            );
-            
-            config.Routes.MapHttpRoute(
-                name: "ParentDefaultApi",
-                routeTemplate: "{parent}/{parentId}/{controller}/{id}",
-                defaults: new { id = RouteParameter.Optional }
+                routeTemplate: "{*path}",
+                defaults: new { controller = "Resource" }
             );
 
             // Uncomment the following line of code to enable query support for actions with an IQueryable or IQueryable<T> return type.
