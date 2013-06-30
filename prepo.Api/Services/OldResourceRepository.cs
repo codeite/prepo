@@ -6,14 +6,14 @@ using prepo.Api.Resources.Base;
 
 namespace prepo.Api.Services
 {
-    public class ResourceRepository<TCollectionResource, TItemResource, TDbo> 
-        where TCollectionResource : HalResource
+    public class OldResourceRepository<TCollectionResource, TItemResource, TDbo>
+        where TCollectionResource : HalResource<TDbo>
         where TItemResource : HalItemResource<TDbo>
         where TDbo : DbObject
     {
-        private readonly IRepository<TDbo> _repository;
+        private readonly Contracts.Services.IRepository<TDbo> _repository;
 
-        public ResourceRepository(IRepository<TDbo> repository)
+        public OldResourceRepository(Contracts.Services.IRepository<TDbo> repository)
         {
             _repository = repository;
         }
@@ -33,14 +33,14 @@ namespace prepo.Api.Services
                 {
                     var pagedResource = resource as HalPagedCollectionResource<TDbo>;
 
-                    pagedResource.Page = page.Value;
-                    pagedResource.Count = count ?? 10;
-                    pagedResource.Items = _repository.GetMany(page.Value, count ?? 10);
+                    //pagedResource.Page = page.Value;
+                    //pagedResource.Count = count ?? 10;
+                    //pagedResource.Items = _repository.GetMany(page.Value, count ?? 10);
                 }
                 else if (resource is HalCollectionResource<TDbo>)
                 {
                     var collectionResource = resource as HalCollectionResource<TDbo>;
-                    collectionResource.Items = _repository.GetMany(1, int.MaxValue);
+                    //collectionResource.Items = _repository.GetMany(1, int.MaxValue);
                 }
             }
 
@@ -66,6 +66,8 @@ namespace prepo.Api.Services
 
         public bool SaveItem(ref string id, TItemResource userItemResource)
         {
+            throw new NotImplementedException();
+            /*
             var instance = userItemResource.Instance;
 
             if (id != null && id != instance.Id)
@@ -76,6 +78,7 @@ namespace prepo.Api.Services
             id = instance.Id;
 
             return _repository.Put(instance);
+             */
         }
 
         public void DeleteAll()

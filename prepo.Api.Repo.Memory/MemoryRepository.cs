@@ -8,7 +8,12 @@ namespace prepo.Api.Repo.Memory
     public class MemoryRepository<T> : IRepository<T>
         where T : DbObject
     {
-        private static readonly Dictionary<string, T> _store = MemoryDbObjectRepository.StoreFor<T>();
+        private static readonly Dictionary<string, T> _store = RootMemoryRepository.StoreFor<T>();
+
+        public bool Exists(string id)
+        {
+            return _store.ContainsKey(id);
+        }
 
         public T GetOne(string id)
         {
@@ -32,8 +37,11 @@ namespace prepo.Api.Repo.Memory
 
         public string Post(T item)
         {
-            item.Id = (_store.Keys.Select(int.Parse).Max() + 1).ToString();
-
+            if (item.Id == null)
+            {
+                item.Id = MemoryFlake.Next();
+            }
+            
             _store[item.Id] = item;
 
             return item.Id;
@@ -52,6 +60,16 @@ namespace prepo.Api.Repo.Memory
         public IQueryable<T> Query()
         {
             return _store.Values.AsQueryable();
+        }
+    }
+
+    public class MemoryFlake
+    {
+        private static int _index = 100;
+
+        public static string Next()
+        {
+            return (_index++).ToString();
         }
     }
 }

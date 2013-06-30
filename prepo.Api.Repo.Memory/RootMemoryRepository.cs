@@ -7,9 +7,10 @@ using prepo.Api.Contracts.Services;
 
 namespace prepo.Api.Repo.Memory
 {
-    public class MemoryDbObjectRepository : IRepository<DbObject>
+    public class RootMemoryRepository : IRepository<PrepoRoot>
     {
         private static readonly Dictionary<Type, dynamic>  _userStores = new Dictionary<Type, dynamic>();
+        public static readonly PrepoRoot Root = new PrepoRoot();
 
         public static Dictionary<string,T> StoreFor<T>()
         {
@@ -25,22 +26,27 @@ namespace prepo.Api.Repo.Memory
             }
         }
 
-        public DbObject GetOne(string id)
+        public bool Exists(string id)
+        {
+            return true;
+        }
+
+        public PrepoRoot GetOne(string id)
+        {
+            return Root;
+        }
+
+        public IEnumerable<PrepoRoot> GetMany(int page, int count)
+        {
+            yield return Root;
+        }
+
+        public bool Put(PrepoRoot item)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<DbObject> GetMany(int page, int count)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Put(DbObject item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string Post(DbObject item)
+        public string Post(PrepoRoot item)
         {
             throw new NotImplementedException();
         }
@@ -58,7 +64,7 @@ namespace prepo.Api.Repo.Memory
             }
         }
 
-        public IQueryable<DbObject> Query()
+        public IQueryable<PrepoRoot> Query()
         {
             throw new NotImplementedException();
         }

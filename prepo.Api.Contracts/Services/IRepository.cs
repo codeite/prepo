@@ -5,6 +5,7 @@ namespace prepo.Api.Contracts.Services
 {
     public interface IRepository<T>
     {
+        bool Exists(string id);
         T GetOne(string id);
         IEnumerable<T> GetMany(int page, int count);
         bool Put(T item);

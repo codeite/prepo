@@ -1,3 +1,4 @@
+using System;
 using prepo.Api.Contracts.Models;
 using prepo.Api.Infrastructure;
 using prepo.Api.Resources.Base;
@@ -12,10 +13,5 @@ namespace prepo.Api.Services
         {
             return GenericActivator.CreateInstance<TItemResource>(id, owner);
         }
-    }
-
-    public class ResourceRespositoryFactory
-    {
-        
     }
 }

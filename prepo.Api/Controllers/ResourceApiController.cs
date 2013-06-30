@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using prepo.Api.Contracts.Models;
+using prepo.Api.Models;
 using prepo.Api.Resources;
 using prepo.Api.Resources.Base;
 
@@ -56,16 +57,16 @@ namespace prepo.Api.Controllers
                 HttpStatusCode statusCode;
                 switch (saveResourceResult.ActionPerfomed)
                 {
-                    case SaveResourceResult<TItem>.ActionPerfomedOptions.Created:
+                    case ActionPerfomedOptions.Created:
                         statusCode = HttpStatusCode.Created;
                         break;
-                    case SaveResourceResult<TItem>.ActionPerfomedOptions.Updated:
+                    case ActionPerfomedOptions.Updated:
                         statusCode = HttpStatusCode.OK;
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-                var response = Request.CreateResponse(statusCode, saveResourceResult.Resource); 
+                var response = Request.CreateResponse(statusCode, saveResourceResult.Instance); 
 
                 response.Headers.Location = Request.RequestUri;
                 return response;
@@ -89,17 +90,17 @@ namespace prepo.Api.Controllers
                 HttpStatusCode statusCode;
                 switch (saveResourceResult.ActionPerfomed)
                 {
-                    case SaveResourceResult<TItem>.ActionPerfomedOptions.Created:
+                    case ActionPerfomedOptions.Created:
                         statusCode = HttpStatusCode.Created;
                         break;
-                    case SaveResourceResult<TItem>.ActionPerfomedOptions.Updated:
+                    case ActionPerfomedOptions.Updated:
                         statusCode = HttpStatusCode.OK;
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
 
-                var response = Request.CreateResponse(statusCode, saveResourceResult.Resource);
+                var response = Request.CreateResponse(statusCode, saveResourceResult.Instance);
                 response.Headers.Location = new Uri(Request.RequestUri, content.SelfLink.Href);
                 return response;
             }

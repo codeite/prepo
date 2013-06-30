@@ -6,13 +6,13 @@ using prepo.Api.Resources.Base;
 namespace prepo.Api.Services
 {
     public class ResourceRepository2<TCollectionResource, TItemResource, TDbo> 
-        where TCollectionResource : HalResource
+        where TCollectionResource : HalResource<TDbo>
         where TItemResource : HalItemResource<TDbo>
         where TDbo : DbObject
     {
-        private readonly IRepository<TDbo> _repository;
+        private readonly Contracts.Services.IRepository<TDbo> _repository;
 
-        public ResourceRepository2(IRepository<TDbo> repository)
+        public ResourceRepository2(Contracts.Services.IRepository<TDbo> repository)
         {
             _repository = repository;
         }

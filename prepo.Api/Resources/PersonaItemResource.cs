@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using prepo.Api.Contracts.Models;
 using prepo.Api.Resources.Base;
+using prepo.Api.Services;
 
 namespace prepo.Api.Resources
 {
@@ -12,10 +14,10 @@ namespace prepo.Api.Resources
 
         public PersonaResource(PrepoPersona persona)
             : base(Self + persona.Id, persona)
-        { }
+        { }C:\Projects\prepo\prepo.Api\Services\
         */
 
-        public PersonaItemResource(string id, IHalResource owner)
+        public PersonaItemResource( string id, IHalResource owner)
             : base(id, owner, id)
         {
         }

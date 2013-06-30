@@ -1,10 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using prepo.Api.Contracts.Models;
+using prepo.Api.Contracts.Services;
 using prepo.Api.Infrastructure;
+using prepo.Api.Models;
+using prepo.Api.Services;
 
 namespace prepo.Api.Resources.Base
 {
-    public abstract class HalResource : IHalResource
+    public abstract class HalResource<TDbo>
+        : IHalResource
+        where TDbo : DbObject
     {
         private readonly string _resourceName;
         private readonly ResourceLink _selfLink;
@@ -27,13 +35,27 @@ namespace prepo.Api.Resources.Base
             get { return _resourceName; }
         }
 
-        public virtual object ToDynamicJson()
+        public Type DboType { get { return typeof (TDbo); }}
+
+        public string RebuildPath()
+        {
+            if (Owner != null)
+            {
+                return UriBuilderHelper.Combine(Owner.RebuildPath(), ResourceName);
+            }
+            else
+            {
+                return ResourceName;
+            }
+        }
+
+        public virtual object ToDynamicJson(DbObject instance, IEnumerable<ResourceLink> additionalLinks = null)
         {
             var root = new Dictionary<string, object>();
             var links = new Dictionary<string, object>();
 
             links[_selfLink.Name] = MakeHref(_selfLink.Href);
-            foreach (var relatedResource in GetRelatedResources())
+            foreach (var relatedResource in GetRelatedResources().Concat(additionalLinks ?? new ResourceLink[0]))
             {
                 var href = MakeHref(relatedResource.Href);
 
@@ -55,13 +77,14 @@ namespace prepo.Api.Resources.Base
                     links[relatedResource.Name] = href;
                 }
             }
+
             root["_links"] = links;
-            AddProperties(root);
+            AddProperties(root, instance);
             GetEmbededResources();
             return root;
         }
 
-        protected virtual void AddProperties(Dictionary<string, object> dictionary)
+        protected virtual void AddProperties(Dictionary<string, object> dictionary, DbObject dbObject)
         {
             
         }

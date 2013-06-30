@@ -1,4 +1,5 @@
 ﻿using prepo.Api.Contracts.Models;
+using prepo.Api.Models;
 using prepo.Api.Resources;
 using prepo.Api.Resources.Base;
 using prepo.Api.Services;
@@ -11,9 +12,9 @@ namespace prepo.Api.Controllers
         where TItem : HalItemResource<TDbo>
         where TDbo : DbObject
     {
-        private readonly ResourceRepository<TCollection, TItem, TDbo> _repository;
+        private readonly OldResourceRepository<TCollection, TItem, TDbo> _repository;
 
-        public DefaultController(ResourceRepository<TCollection, TItem, TDbo> repository)
+        public DefaultController(OldResourceRepository<TCollection, TItem, TDbo> repository)
         {
             _repository = repository;
         }
@@ -33,15 +34,14 @@ namespace prepo.Api.Controllers
             if (content == null)
             {
                 _repository.Delete(id);
-                return new SaveResourceResult<TItem>(SaveResourceResult <TItem>.ActionPerfomedOptions.Deleted);
+                return new SaveResourceResult<TItem>(ActionPerfomedOptions.Deleted);
             }
             else
             {
                 var updated = _repository.SaveItem(ref id, content);
-                return new SaveResourceResult<TItem>(updated ? SaveResourceResult<TItem>.ActionPerfomedOptions.Updated : SaveResourceResult<TItem>.ActionPerfomedOptions.Created)
+                return new SaveResourceResult<TItem>(updated ? ActionPerfomedOptions.Updated : ActionPerfomedOptions.Created)
                 {
-                    Location = content.SelfLink.Href,
-                    Resource = _repository.GetById(id),
+                    //Instance = _repository.GetById(id),
                 };
             }
         }

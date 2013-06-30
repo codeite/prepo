@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using prepo.Api.Contracts.Models;
+using prepo.Api.Contracts.Services;
 
 namespace prepo.Api.Resources.Base
 {
-    public abstract class HalPagedCollectionResource<T> : HalCollectionResource<T>
-        where T : DbObject
+    public abstract class HalPagedCollectionResource<TDbo>
+        : HalCollectionResource<TDbo>
+        where TDbo : DbObject
     {
         private readonly string _itemCollectionName;
 
@@ -22,37 +25,7 @@ namespace prepo.Api.Resources.Base
         {
         }
 
-        public int? Page { get; set; }
 
-        public int Count { get; set; }
 
-        public override IEnumerable<ResourceLink> GetRelatedResources()
-        {
-            foreach (var relatedResource in base.GetRelatedResources())
-            {
-                yield return relatedResource;
-            }
-
-            yield return new ResourceLink("page", SelfLink.Href + "?page={page}&count={count}");
-            yield return new ResourceLink("first", SelfLink.Href + "?page=1&count=10");
-
-            if (Page.HasValue)
-            {
-                yield return new ResourceLink("next", string.Format("{0}?page={1}&count={2}", SelfLink.Href, Page + 1, Count));
-
-                if (Page.Value > 1)
-                {
-                    yield return new ResourceLink("prev", string.Format("{0}?page={1}&count={2}", SelfLink.Href, (Page - 1), Count));
-                }
-            }
-
-            if (Items != null)
-            {
-                foreach (var item in Items)
-                {
-                    yield return new ResourceLink(ResourceName, SelfLink.Href + "/" + item.Id);
-                }
-            }
-        }
     }
 }

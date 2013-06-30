@@ -87,6 +87,7 @@
     </Reference>
     <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.20710.0\lib\net40\System.Web.Http.dll</HintPath>
+      <Aliases>global,sys_web_http</Aliases>
     </Reference>
     <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.20710.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
@@ -113,18 +114,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\SaveResourceResult.cs">
+    <Compile Include="Infrastructure\ResourceHttpControllerSelector.cs" />
+    <Compile Include="Infrastructure\MyHttpControllerTypeResolver.cs" />
+    <Compile Include="Resources\Base\IHalResourceInstance.cs" />
+    <Compile Include="Services\DboRepository.cs" />
+    <Compile Include="Models\SaveResourceResult.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Services\IDboRepository.cs" />
     <Compile Include="Services\IItemResourceFactory.cs" />
+    <Compile Include="Services\IResourceRepository.cs" />
+    <Compile Include="Services\IResourceResolutionService.cs" />
     <Compile Include="Services\ItemResourceFactory.cs" />
     <Compile Include="Resources\Base\HalResource.cs" />
     <Compile Include="Services\ResourceChainBuilder.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="App_Start\IocConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\DefaultController.cs" />
-    <Compile Include="Controllers\ResourceApiController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -142,11 +148,7 @@
     <Compile Include="Resources\RootResource.cs" />
     <Compile Include="Resources\UserItemResource.cs" />
     <Compile Include="Resources\UserCollectionResource.cs" />
-    <Compile Include="Services\PersonaResourceRepository.cs" />
-    <Compile Include="Services\ResourceRepository.cs" />
-    <Compile Include="Services\ResourceRepository2.cs" />
-    <Compile Include="Services\RootResourceRepository.cs" />
-    <Compile Include="Services\UserResourceRepository.cs" />
+    <Compile Include="Services\OldResourceRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />

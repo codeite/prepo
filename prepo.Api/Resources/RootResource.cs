@@ -7,10 +7,10 @@ using prepo.Api.Services;
 
 namespace prepo.Api.Resources
 {
-    public class RootResource : HalItemResource<DbObject>
+    public class RootResource : HalSingleResource<PrepoRoot>
     {
         public RootResource()
-            : base("", null, "")
+            : base(null, "")
         {
         }
 
