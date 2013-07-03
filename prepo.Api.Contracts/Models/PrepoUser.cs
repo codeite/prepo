@@ -23,4 +23,12 @@ namespace prepo.Api.Contracts.Models
             Id = id;
         }
     }
+
+    public class PrepoRoot : DbObject
+    {
+        public PrepoRoot()
+        {
+            Id = string.Empty;
+        }
+    }
 }

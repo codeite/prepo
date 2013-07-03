@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Web;
 using Codeite.Core.Json;
 using Newtonsoft.Json;
+using prepo.Api.Contracts.Models;
 using prepo.Api.Resources;
 using prepo.Api.Resources.Base;
 
@@ -23,19 +25,20 @@ namespace prepo.Api.Infrastructure
 
         public override bool CanReadType(Type type)
         {
-            var cwt = typeof(HalResource).IsAssignableFrom(type);
+            var cwt = typeof(IHalResourceInstance).IsAssignableFrom(type);
+            cwt |= typeof(DbObject).IsAssignableFrom(type);
             return cwt;
         }
 
         public override bool CanWriteType(Type type)
         {
-            var cwt = typeof(HalResource).IsAssignableFrom(type);
+            var cwt = typeof(IHalResourceInstance).IsAssignableFrom(type);
             return cwt;
         }
 
         public override void WriteToStream(Type type, object value, Stream writeStream, System.Net.Http.HttpContent content)
         {
-            var halResource = value as HalResource;
+            var halResource = value as IHalResourceInstance;
 
             if (halResource == null)
             {
@@ -51,6 +54,18 @@ namespace prepo.Api.Infrastructure
 
         public override object ReadFromStream(Type type, Stream readStream, System.Net.Http.HttpContent content, IFormatterLogger formatterLogger)
         {
+            if (typeof (DbObject).IsAssignableFrom(type))
+            {
+                return ReadDbObject(type, content);
+            }
+            else
+            {
+                return ReadResource(type, content);
+            }
+        }
+
+        private IHalResourceInstance ReadResource(Type type, HttpContent content)
+        {
             var json = DynamicJsonObject.ReadJson(content.ReadAsStringAsync().Result);
             string id = json["id"].ToString();
 
@@ -60,7 +75,17 @@ namespace prepo.Api.Infrastructure
 
             object resourceInstance = Activator.CreateInstance(type, dboInstance);
 
-            return resourceInstance;
+            return resourceInstance as IHalResourceInstance;
+        }
+
+        private DbObject ReadDbObject(Type type, HttpContent content)
+        {
+            var json = DynamicJsonObject.ReadJson(content.ReadAsStringAsync().Result);
+            string id = json["id"].ToString();
+
+            var dboInstance = Activator.CreateInstance(type, id) as DbObject;
+
+            return dboInstance;
         }
 
         private Type GetDbObjectType(Type resourceType)

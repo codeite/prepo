@@ -7,6 +7,7 @@ using prepo.Api.Services;
 
 namespace prepo.Api.Controllers
 {
+    /*
     public class RootController : ResourceApiController<RootResource, DbObject>
     {
         private readonly RootResourceRepository _repository;
@@ -27,6 +28,7 @@ namespace prepo.Api.Controllers
             return true;
         }
     }
+    */
 
     /*
     public class AddressesController : ResourceApiController<AddressesResource>
