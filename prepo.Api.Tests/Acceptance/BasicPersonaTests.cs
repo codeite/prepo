@@ -67,7 +67,7 @@ namespace prepo.Api.Tests.Acceptance
             var realLast = last ?? first;
             for (var i = first; i <= realLast; i++)
             {
-                personasRd.PutToRel("persona", new { id = i }, new PersonaBuilder(i).BuildAsContent());
+                personasRd.PutToRel("persona", new { id = i.ToString() }, new PersonaBuilder(i).BuildAsContent());
             }
         }
 

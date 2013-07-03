@@ -38,7 +38,6 @@ namespace prepo.Api.Tests.Acceptance
                 .FollowRel("first");
 
             // Assert
-            Console.WriteLine(users.Body);
             users.Body.ShouldBeJson(@"
             {
                 '_links': { 
@@ -86,7 +85,6 @@ namespace prepo.Api.Tests.Acceptance
             var users = usersRd.FollowRel("page", new { page = 2, count = 5 });
 
             // Assert
-            Console.WriteLine(users.Body);
             users.Body.ShouldBeJson(@"
             {
                 '_links': { 
@@ -142,7 +140,6 @@ namespace prepo.Api.Tests.Acceptance
             var users = usersRd.FollowRel("user", new { id = 15 });
 
             // Assert
-            Console.WriteLine(users.Body);
             users.Body.ShouldBeJson(MakeUser("15"));
         }
 
@@ -172,7 +169,7 @@ namespace prepo.Api.Tests.Acceptance
             // Act
             var user = client
                 .GetRoot()
-                .PostToRel("users", null, new JsonBodyContent("{'id':77}"));
+                .PostToRel("users", null, new JsonBodyContent("{'id':'77'}"));
 
             // Assert
             user.Location.Should().Be("http://dev.prepo.codeite.com/users/77");
@@ -194,9 +191,7 @@ namespace prepo.Api.Tests.Acceptance
             // Assert
             user.Response.Location.Should().Be("http://dev.prepo.codeite.com/users/65");
 
-
             // Act
-
             var userGet = users.FollowRel("user", new { id = 65 });
 
             // Assert
@@ -254,7 +249,6 @@ namespace prepo.Api.Tests.Acceptance
 
             // Assert
             location.Should().Be("http://dev.prepo.codeite.com/users/96");
-
 
             // Act
             var user = users.FollowRel("user", new { id = 96 });
