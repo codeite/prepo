@@ -10,10 +10,10 @@ namespace prepo.Api.Contracts.Models
         public PrepoUser(string id)
         {
             Id = id;
-            Name = "Number "+id;
         }
 
         public string Name { get; set; }
+        public int Age { get; set; }
     }
 
     public class PrepoPersona : DbObject

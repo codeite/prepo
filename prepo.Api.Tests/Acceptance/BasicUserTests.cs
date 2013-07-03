@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Everest.Content;
 using Everest.Status;
 using FluentAssertions;
@@ -37,7 +38,6 @@ namespace prepo.Api.Tests.Acceptance
                 .FollowRel("first");
 
             // Assert
-            Console.WriteLine(users.Body);
             users.Body.ShouldBeJson(@"
             {
                 '_links': { 
@@ -85,7 +85,6 @@ namespace prepo.Api.Tests.Acceptance
             var users = usersRd.FollowRel("page", new { page = 2, count = 5 });
 
             // Assert
-            Console.WriteLine(users.Body);
             users.Body.ShouldBeJson(@"
             {
                 '_links': { 
@@ -141,7 +140,6 @@ namespace prepo.Api.Tests.Acceptance
             var users = usersRd.FollowRel("user", new { id = 15 });
 
             // Assert
-            Console.WriteLine(users.Body);
             users.Body.ShouldBeJson(MakeUser("15"));
         }
 
@@ -155,12 +153,11 @@ namespace prepo.Api.Tests.Acceptance
             var user = client
                 .GetRoot()
                 .FollowRel("users")
-                .PutToRel("user", new { id = 22 }, new JsonBodyContent("{'id':22}"));
+                .PutToRel("user", new { id = "sam" }, new JsonBodyContent("{'id':'sam', 'name': 'Sam Plews', 'age': 31}"));
 
             // Assert
-            user.Response.Location.Should().Be("http://dev.prepo.codeite.com/users/22");
-            Console.WriteLine(user.Body);
-            user.Body.ShouldBeJson(MakeUser("22"));
+            user.Response.Location.Should().Be("http://dev.prepo.codeite.com/users/sam");
+            user.Body.ShouldBeJson(MakeUser("sam", name: "Sam Plews", age: 31));
         }
 
         [Test]
@@ -172,7 +169,7 @@ namespace prepo.Api.Tests.Acceptance
             // Act
             var user = client
                 .GetRoot()
-                .PostToRel("users", null, new JsonBodyContent("{'id':77}"));
+                .PostToRel("users", null, new JsonBodyContent("{'id':'77'}"));
 
             // Assert
             user.Location.Should().Be("http://dev.prepo.codeite.com/users/77");
@@ -194,13 +191,10 @@ namespace prepo.Api.Tests.Acceptance
             // Assert
             user.Response.Location.Should().Be("http://dev.prepo.codeite.com/users/65");
 
-
             // Act
-
             var userGet = users.FollowRel("user", new { id = 65 });
 
             // Assert
-            Console.WriteLine(userGet.Body);
             userGet.Body.ShouldBeJson(MakeUser("65"));
         }
 
@@ -256,7 +250,6 @@ namespace prepo.Api.Tests.Acceptance
             // Assert
             location.Should().Be("http://dev.prepo.codeite.com/users/96");
 
-
             // Act
             var user = users.FollowRel("user", new { id = 96 });
 
@@ -286,7 +279,7 @@ namespace prepo.Api.Tests.Acceptance
                .Where(x => x.StatusCode == 404);
         }
         
-        private static string MakeUser(string id)
+        private static string MakeUser(string id, string name = null, int age = 0)
         {
             return @"
             {
@@ -295,8 +288,11 @@ namespace prepo.Api.Tests.Acceptance
                     'personas': {'href': '/users/$id$/personas'}
                 },
                 'id' : '$id$',
-                'name' : 'Number $id$'
-            }".Replace("$id$", id);
+                'name' : $name$,
+                'age' : $age$,
+            }".Replace("$id$", id)
+              .Replace("$name$", name == null ? "null": "'"+name+"'")
+              .Replace("$age$", age.ToString(CultureInfo.InvariantCulture));
         }
     }
 }
