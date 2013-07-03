@@ -30,8 +30,8 @@ namespace prepo.Api.Tests.Helpers
                 throw new Exception("Actual JSON invalid, " + e.Message + "\n" + actual);
             }
 
-            Console.WriteLine("e: " + expected);
-            Console.WriteLine("a: " + actual);
+            Console.WriteLine("e: " + expectedCannonical);
+            Console.WriteLine("a: " + actualCannonical);
 
             actualCannonical.Should().Be(expectedCannonical);
         }
