@@ -1,5 +1,6 @@
-﻿namespace prepo.Api.Controllers
+﻿namespace prepo.Api.Models
 {
+    /*
     public class SaveResourceResult<T>
     {
         private readonly ActionPerfomedOptions _actionPerfomed;
@@ -9,20 +10,22 @@
             _actionPerfomed = actionPerfomed;
         }
 
-        public string Location { get; set; }
+        // public string Location { get; set; }
 
         public ActionPerfomedOptions ActionPerfomed
         {
             get { return _actionPerfomed; }
         }
 
-        public enum ActionPerfomedOptions
-        {
-            Deleted,
-            Created,
-            Updated,
-        }
+        // public T Instance { get; set; }
+    }
+    */
 
-        public T Resource { get; set; }
+    public enum ActionPerfomed
+    {
+        NotSuported,
+        Deleted,
+        Created,
+        Updated,
     }
 }

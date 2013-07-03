@@ -8,7 +8,7 @@ namespace prepo.Api.Repo.Memory
     {
         public static void Register(ContainerBuilder builder)
         {
-            builder.RegisterType<MemoryDbObjectRepository>().As<IRepository<DbObject>>();
+            builder.RegisterType<RootMemoryRepository>().As<IRepository<PrepoRoot>>();
             builder.RegisterType<MemoryRepository<PrepoUser>>().As<IRepository<PrepoUser>>();
             builder.RegisterType<MemoryRepository<PrepoPersona>>().As<IRepository<PrepoPersona>>();
         }

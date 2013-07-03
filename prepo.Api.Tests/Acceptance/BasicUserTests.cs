@@ -219,7 +219,7 @@ namespace prepo.Api.Tests.Acceptance
             var userFromGet = users.FollowRel("user", new { id = 65 });
 
             // Assert
-            userFromPut.Body.ShouldBeEquivalentTo(userFromGet.Body);
+            userFromPut.Body.ShouldBeJson(userFromGet.Body);
         }
         
         [Test]
@@ -237,7 +237,7 @@ namespace prepo.Api.Tests.Acceptance
             var userFromGet = users.FollowRel("user", new { id = 66 });
 
             // Assert
-            userFromPost.Body.ShouldBeEquivalentTo(userFromGet.Body);
+            userFromPost.Body.ShouldBeJson(userFromGet.Body);
         }
 
         [Test]

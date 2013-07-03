@@ -15,8 +15,8 @@ namespace prepo.Api
         protected void Application_Start()
         {
           
-            IocConfig.ConfigureIoc(GlobalConfiguration.Configuration);
-            WebApiConfig.Register(GlobalConfiguration.Configuration);
+            var container = IocConfig.ConfigureIoc(GlobalConfiguration.Configuration);
+            WebApiConfig.Register(GlobalConfiguration.Configuration, container);
         }
     }
 }

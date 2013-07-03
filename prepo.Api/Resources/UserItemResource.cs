@@ -1,16 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using prepo.Api.Contracts.Models;
 using prepo.Api.Resources.Base;
 using prepo.Api.Services;
 
 namespace prepo.Api.Resources
 {
-    public class RootResource : HalSingleResource<PrepoRoot>
+    public class UserItemResource : HalItemResource<PrepoUser>
     {
-        public RootResource()
-            : base(null, "")
+        public const string ItemName = "user";
+
+        /*
+        public UserResource(PrepoUser user)
+            : base(RootResource.Self + "users/" + user.Id, user)
+        { }
+        */
+
+        public UserItemResource(string id, IHalResource owner)
+            : base(id, owner, id)
         {
         }
 
@@ -20,8 +27,7 @@ namespace prepo.Api.Resources
             {
                 return new Dictionary<string, IHalResource>
                 {
-                    { UserCollectionResource.CollectionName, new UserCollectionResource(this) },
-                    { PersonaCollectionResource.CollectionName, new PersonaCollectionResource(this) }
+                    {PersonaCollectionResource.CollectionName, new PersonaCollectionResource(this)}
                 };
             }
         }

@@ -1,6 +1,6 @@
 ﻿namespace prepo.Api.Contracts.Models
 {
-    public class DbObject
+    public abstract class DbObject
     {
         public string Id { get; set; }
     }
