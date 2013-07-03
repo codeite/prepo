@@ -3,7 +3,7 @@
    
    <PropertyGroup>
      <Configuration Condition=" '$(Configuration)' == '' ">Dev</Configuration>
-     <ClassLibraryOutputDirectory>bin\$(Configuration)</ClassLibraryOutputDirectory>
+     <ClassLibraryOutputDirectory>bin</ClassLibraryOutputDirectory>
      <ProjectDirectory>$(SolutionDir)\$(ProjectName)</ProjectDirectory>
      <ProjectFile>$(ProjectDirectory)\$(ProjectName).csproj</ProjectFile>
      <ApplicationOutputDirectory>$(ProjectDirectory)\$(ClassLibraryOutputDirectory)</ApplicationOutputDirectory>
