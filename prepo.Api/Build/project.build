@@ -16,7 +16,7 @@
    </Target>
 
 	<Target Name="DeployApp">
-	  <Message Text="Copying application files..." />
+	  <Message Text="Copying application files... $(ApplicationOutputDirectory)\**\*.*" />
 	  <ItemGroup>
 	    <ApplicationFiles Include="$(ApplicationOutputDirectory)\**\*.*" />
 	  </ItemGroup>
