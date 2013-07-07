@@ -110,6 +110,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Infrastructure\JsonModelBinderCache.cs" />
     <Compile Include="Infrastructure\ResourceHttpControllerSelector.cs" />
     <Compile Include="Infrastructure\MyHttpControllerTypeResolver.cs" />
     <Compile Include="Resources\Base\IHalResourceInstance.cs" />

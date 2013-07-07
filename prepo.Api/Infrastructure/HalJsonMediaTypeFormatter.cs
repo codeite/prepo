@@ -86,6 +86,7 @@ namespace prepo.Api.Infrastructure
 
             var dboInstance = Activator.CreateInstance(type, id) as DbObject;
 
+            
             foreach (var propertyInfo in type.GetProperties())
             {
                 var name = propertyInfo.Name.ToLowerInvariant();
