@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace prepo.Api.Infrastructure
+namespace prepo.Api.Infrastructure.Reflecting
 {
     public delegate object JsonModelBinder(Dictionary<string, object> json);
 
@@ -39,6 +39,12 @@ namespace prepo.Api.Infrastructure
 
         public JsonModelBinder CreateBinderFor(Type type)
         {
+            Expression uncompiled;
+            return CreateBinderFor(type, out uncompiled);
+        }
+
+        public JsonModelBinder CreateBinderFor(Type type, out Expression uncompiled)
+        {
             var ctor = type.GetConstructor(new Type[0]);
 
             Expression<Func<TestClassB, object>> test = tcb =>
@@ -57,19 +63,25 @@ namespace prepo.Api.Infrastructure
                     )
             };
 
-            var indexer = typeof (Dictionary<string, object>).GetProperty("Item");
+            //var indexer = typeof (Dictionary<string, object>).GetProperty("Item");
+            var indexer = MemberAccessHelper.GetIndexerProperty<Dictionary<string, object>>();
+            var tester = MemberAccessHelper.GetMethod<Dictionary<string, object>>(x => x.ContainsKey(null));
 
             foreach (var propertyInfo in type.GetProperties())
             {
                 var readJson = Expression.Call(jsonValue, indexer.GetGetMethod(), Expression.Constant(propertyInfo.Name.ToLowerInvariant()));
 
-                var readJsonAsString = Expression.Convert(readJson, typeof (string));
+                var readJsonAsCorrectType = ReadJsonAsCorrectType(readJson, propertyInfo.PropertyType);
+
+                var testIfPropertyExists = Expression.Call(jsonValue, tester, Expression.Constant(propertyInfo.Name.ToLowerInvariant()));
+
+                var assignJsonToProperty = Expression.Call(instance, propertyInfo.GetSetMethod(), readJsonAsCorrectType);
 
                 bodyExpressions.Add(
-                    Expression.Call(
-                        instance,
-                        propertyInfo.GetSetMethod(),
-                        readJsonAsString));
+                    Expression.IfThen(testIfPropertyExists, assignJsonToProperty)
+                    );
+
+
             }
             
             bodyExpressions.Add(instance);
@@ -82,9 +94,10 @@ namespace prepo.Api.Infrastructure
                 bodyExpressions
             );
 
-            
+            var lambda = Expression.Lambda<JsonModelBinder>(block, jsonValue);
+            uncompiled = lambda;
 
-            return Expression.Lambda<JsonModelBinder>(block, jsonValue).Compile();
+            return lambda.Compile();
 
             //int factorial = Expression.Lambda<Func<int, int>>(block, value).Compile()(5);
 
@@ -100,6 +113,45 @@ namespace prepo.Api.Infrastructure
 
                 return instnace;
             };
+        }
+
+        private Expression ReadJsonAsCorrectType(MethodCallExpression readJson, Type type)
+        {
+            var name = "To" + type.Name;
+
+            var method = typeof(Convert).GetMethod(name, BindingFlags.Public | BindingFlags.Static, null, CallingConventions.Any, new[] { typeof(object) }, null);
+
+            if (method != null)
+            {
+                return Expression.Call(method, readJson);
+            }
+
+            Expression uncompiled;
+            JsonModelBinder child = CreateBinderFor(type, out uncompiled);
+
+            return uncompiled;
+
+            throw new Exception(string.Format("Don't know how to convert type: {0} (Tried Convert.{1})", type, name));
+        }
+    }
+
+    public static class JsonReadingHelper
+    {
+        public static string ReadString(object value)
+        {
+            return value.ToString();
+        }
+
+        public static int ReadInt32(object value)
+        {
+            if (value is int)
+            {
+                return (int) value;
+            }
+            else
+            {
+                return Convert.ToInt32(value);
+            }
         }
     }
 }
