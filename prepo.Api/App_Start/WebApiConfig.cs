@@ -6,6 +6,7 @@ using System.Web.Http.Dispatcher;
 using Autofac;
 using Autofac.Core.Lifetime;
 using prepo.Api.Infrastructure;
+using prepo.Api.Infrastructure.Reflecting;
 using prepo.Api.Services;
 
 namespace prepo.Api
@@ -54,15 +55,15 @@ namespace prepo.Api
             // For more information, refer to: http://www.asp.net/web-api
             config.EnableSystemDiagnosticsTracing();
 
-            RegisterMediaFormatter(config);
+            RegisterMediaFormatter(config, new JsonModelBinderCache());
         }
 
-        public static void RegisterMediaFormatter(HttpConfiguration config)
+        public static void RegisterMediaFormatter(HttpConfiguration config, JsonModelBinderCache modelBinderCache)
         {
             var jsonFormatter = config.Formatters.JsonFormatter;
             config.Formatters.Remove(jsonFormatter);
 
-            config.Formatters.Add(new HalJsonMediaTypeFormatter());
+            config.Formatters.Add(new HalJsonMediaTypeFormatter(modelBinderCache));
         }
     }
 }

@@ -1,8 +1,9 @@
-﻿using Everest.Content;
+﻿using System.Globalization;
+using Everest.Content;
 
 namespace prepo.Api.Tests.Builders
 {
-    public class UserBuilder
+    public class UserBuilder : ResourceBuilder<UserBuilder>, IResourceBuilder
     {
         private string _id;
 
@@ -10,12 +11,12 @@ namespace prepo.Api.Tests.Builders
         {
             _id = "0";
         }
-        
+
         public UserBuilder(int id)
         {
             _id = id.ToString();
-        } 
-        
+        }
+
         public UserBuilder(string id)
         {
             _id = id;
@@ -27,9 +28,15 @@ namespace prepo.Api.Tests.Builders
             set { _id = value; }
         }
 
-        public UserBuilder WithId(string id)
+        public IResourceBuilder WithId(string id)
         {
             _id = id;
+            return this;
+        }
+
+        public IResourceBuilder WithId(int id)
+        {
+            _id = id.ToString(CultureInfo.InvariantCulture);
             return this;
         }
 
