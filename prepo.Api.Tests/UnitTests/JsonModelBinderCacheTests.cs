@@ -114,7 +114,6 @@ namespace prepo.Api.Tests.UnitTests
             object instance = binder(json);
 
             // Assert
-            // Assert
             instance.Should().BeOfType<TestClassE>();
             var typedInstance = instance as TestClassE;
             typedInstance.Child.Should().NotBeNull();
@@ -122,6 +121,101 @@ namespace prepo.Api.Tests.UnitTests
             typedInstance.Child.Alpha.Should().Be("my child");
         }
 
+        [Test]
+        public void TestReadStringArray()
+        {
+            // Arrange
+            var cache = new JsonModelBinderCache();
+            var json = DynamicJsonObject.ReadJson(@"{'mystringarray':['alpaha', 'beta', 'charlie']}") as Dictionary<string, object>;
+            Expression uncompiled;
+
+            // Act
+            var binder = cache.CreateBinderFor(typeof(TestClassF), out uncompiled);
+
+
+            Console.WriteLine(MemberAccessHelper.GetDebugExpression(uncompiled));
+
+            object instance = binder(json);
+
+            // Assert
+            instance.Should().BeOfType<TestClassF>();
+            var typedInstance = instance as TestClassF;
+            typedInstance.MyStringArray.Should().NotBeNull();
+
+            typedInstance.MyStringArray.ShouldBeEquivalentTo(new []{"alpaha", "beta", "charlie"});
+        }
+
+        [Test]
+        public void TestReadIntArray()
+        {
+            // Arrange
+            var cache = new JsonModelBinderCache();
+            var json = DynamicJsonObject.ReadJson(@"{'myintarray':[1, 2, 3]}") as Dictionary<string, object>;
+            Expression uncompiled;
+
+            // Act
+            var binder = cache.CreateBinderFor(typeof(TestClassG), out uncompiled);
+
+
+            Console.WriteLine(MemberAccessHelper.GetDebugExpression(uncompiled));
+
+            object instance = binder(json);
+
+            // Assert
+            instance.Should().BeOfType<TestClassG>();
+            var typedInstance = instance as TestClassG;
+            typedInstance.MyIntArray.Should().NotBeNull();
+
+            typedInstance.MyIntArray.ShouldBeEquivalentTo(new[] { 1, 2, 3 });
+        } 
+        
+        [Test]
+        public void TestReadComplexArray()
+        {
+            // Arrange
+            var cache = new JsonModelBinderCache();
+            var json = DynamicJsonObject.ReadJson(@"{'arrayoftestclassa':[{'alpha':'first'}, {'alpha':'second'}, {'alpha':'third'}]}") as Dictionary<string, object>;
+            Expression uncompiled;
+
+            // Act
+            var binder = cache.CreateBinderFor(typeof(TestClassH), out uncompiled);
+
+
+            Console.WriteLine(MemberAccessHelper.GetDebugExpression(uncompiled));
+
+            object instance = binder(json);
+
+            // Assert
+            instance.Should().BeOfType<TestClassH>();
+            var typedInstance = instance as TestClassH;
+            typedInstance.ArrayOfTestClassA.Should().NotBeNull();
+
+            typedInstance.ArrayOfTestClassA.ShouldBeEquivalentTo(new[] { new TestClassA { Alpha = "first" }, new TestClassA { Alpha = "second" }, new TestClassA { Alpha = "third" } });
+        }
+
+        [Test]
+        public void TestReadModelWithConstructor()
+        {
+            // Arrange
+            var cache = new JsonModelBinderCache();
+            var json = DynamicJsonObject.ReadJson(@"{alpha:'first'}") as Dictionary<string, object>;
+            Expression uncompiled;
+
+            // Act
+            var binder = cache.CreateBinderFor(typeof(TestClassI), out uncompiled);
+
+
+            Console.WriteLine(MemberAccessHelper.GetDebugExpression(uncompiled));
+
+            object instance = binder(json, "Sam");
+
+            // Assert
+            instance.Should().BeOfType<TestClassI>();
+            var typedInstance = instance as TestClassI;
+            typedInstance.Name.Should().Be("Sam");
+            typedInstance.Alpha.Should().Be("first");
+        }
+      
 
         static readonly object[] TestCaseTypes =
         {
@@ -201,5 +295,31 @@ namespace prepo.Api.Tests.UnitTests
     public class TestClassE
     {
         public TestClassA Child { get; set; }
+    }
+
+    public class TestClassF
+    {
+        public string[] MyStringArray { get; set; }
+    }
+
+    public class TestClassG
+    {
+        public int[] MyIntArray { get; set; }
+    }
+
+    public class TestClassH
+    {
+        public TestClassA[] ArrayOfTestClassA { get; set; }
+    }
+
+    public class TestClassI
+    {
+        public TestClassI(string name)
+        {
+            Name = name;
+        }
+
+        public string Name { get; set; }
+        public string Alpha { get; set; }
     }
 }

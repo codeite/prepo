@@ -69,6 +69,12 @@ namespace prepo.Api.Infrastructure.Reflecting
                 return ReadPropertyInfoFromExpression(unaryExpression.Operand);
             }
 
+            var parameterExpression = expression as ParameterExpression;
+            if (parameterExpression != null)
+            {
+                
+            }
+
             throw new MemberAccessHelperException("I know know what to do with a: " + expression.GetType());
         }
 
