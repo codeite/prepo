@@ -10,12 +10,6 @@ namespace prepo.Api.Resources
     {
         public const string ItemName = "user";
 
-        /*
-        public UserResource(PrepoUser user)
-            : base(RootResource.Self + "users/" + user.Id, user)
-        { }
-        */
-
         public UserItemResource(string id, IHalResource owner)
             : base(id, owner, id)
         {
