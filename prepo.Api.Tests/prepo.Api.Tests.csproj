@@ -65,13 +65,21 @@
     <Compile Include="Acceptance\BasicPersonaTests.cs" />
     <Compile Include="Acceptance\BasicTests.cs" />
     <Compile Include="Acceptance\BasicUserTests.cs" />
+    <Compile Include="Acceptance\GenericBasicTests.cs" />
+    <Compile Include="Acceptance\GenericPersonaBasicTests.cs" />
+    <Compile Include="Acceptance\GenericPersonaChildBasicTests66.cs" />
+    <Compile Include="Acceptance\GenericUserBasicTests.cs" />
     <Compile Include="Acceptance\SubtlyUserTests.cs" />
     <Compile Include="Acceptance\UserChildTests.cs" />
+    <Compile Include="Builders\IResourceBuilder.cs" />
     <Compile Include="Builders\PersonaBuilder.cs" />
+    <Compile Include="Builders\ResourceBuilder.cs" />
     <Compile Include="Builders\UserBuilder.cs" />
     <Compile Include="Helpers\JsonAssertionHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTests\JsonModelBinderCacheTests.cs" />
     <Compile Include="UnitTests\ResourceChainBuilderTests.cs" />
+    <Compile Include="UnitTests\TestMethodAccessHelper.cs" />
     <Compile Include="UnitTests\UriBuilderHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>

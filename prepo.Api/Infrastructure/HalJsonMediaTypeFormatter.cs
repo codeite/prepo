@@ -10,6 +10,7 @@ using System.Web;
 using Codeite.Core.Json;
 using Newtonsoft.Json;
 using prepo.Api.Contracts.Models;
+using prepo.Api.Infrastructure.Reflecting;
 using prepo.Api.Resources;
 using prepo.Api.Resources.Base;
 
@@ -17,8 +18,11 @@ namespace prepo.Api.Infrastructure
 {
     public class HalJsonMediaTypeFormatter : BufferedMediaTypeFormatter
     {
-        public HalJsonMediaTypeFormatter()
+        private readonly JsonModelBinderCache _jsonModelBinderCache;
+
+        public HalJsonMediaTypeFormatter(JsonModelBinderCache jsonModelBinderCache)
         {
+            _jsonModelBinderCache = jsonModelBinderCache;
             this.SupportedMediaTypes.Add(new MediaTypeWithQualityHeaderValue("application/hal+json"));
             this.SupportedMediaTypes.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
@@ -80,12 +84,40 @@ namespace prepo.Api.Infrastructure
 
         private DbObject ReadDbObject(Type type, HttpContent content)
         {
-            var json = DynamicJsonObject.ReadJson(content.ReadAsStringAsync().Result);
+            var json = DynamicJsonObject.ReadJson(content.ReadAsStringAsync().Result) as Dictionary<string, object>;
             string id = json["id"].ToString();
 
+            var modelBinder = _jsonModelBinderCache.GetModelFinderFor(type);
+
+            var dboInstance = modelBinder(json, id) as DbObject;
+
+            /*
+             
+           
             var dboInstance = Activator.CreateInstance(type, id) as DbObject;
+            
+            foreach (var propertyInfo in type.GetProperties())
+            {
+                var name = propertyInfo.Name.ToLowerInvariant();
+
+                if (json.ContainsKey(name))
+                {
+                    SetValue(propertyInfo, dboInstance, json[name]);
+                }
+            }
+            */
 
             return dboInstance;
+        }
+
+        private static void SetValue(PropertyInfo propertyInfo, DbObject dboInstance, object value)
+        {
+            if (propertyInfo.PropertyType == typeof (int))
+            {
+                value = (int) (long) value;
+            }
+
+            propertyInfo.SetValue(dboInstance, value);
         }
 
         private Type GetDbObjectType(Type resourceType)

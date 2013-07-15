@@ -9,12 +9,6 @@ namespace prepo.Api.Resources
     public class UserCollectionResource : HalPagedCollectionResource<PrepoUser>
     {
         public const string CollectionName = "users";
-        /*
-        public UserCollectionResource(string location)
-            : base(UriBuilderHelper.Combine(location, "users"), "user", "users")
-        {
-        }
-        */
 
         public UserCollectionResource(IHalResource owner)
             : base(owner, CollectionName, UserItemResource.ItemName)
@@ -25,7 +19,5 @@ namespace prepo.Api.Resources
         {
             get { return new ItemResourceFactory<UserItemResource, PrepoUser>(); }
         }
-
-        
     }
 }
