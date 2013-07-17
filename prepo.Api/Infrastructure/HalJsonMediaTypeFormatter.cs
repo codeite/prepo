@@ -112,9 +112,21 @@ namespace prepo.Api.Infrastructure
 
         private static void SetValue(PropertyInfo propertyInfo, DbObject dboInstance, object value)
         {
+            var originalValue = value;
+
             if (propertyInfo.PropertyType == typeof (int))
             {
                 value = (int) (long) value;
+            } 
+            
+            if (propertyInfo.PropertyType == typeof (long))
+            {
+                value = (long) value;
+            }
+            
+            if (propertyInfo.PropertyType == typeof (string))
+            {
+                value = value.ToString();
             }
 
             propertyInfo.SetValue(dboInstance, value);

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net.Http;
+using System.Web.Http;
 using NUnit.Framework;
 using prepo.Api.Tests.Helpers;
 using prepo.Client;
