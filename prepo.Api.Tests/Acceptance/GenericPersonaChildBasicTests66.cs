@@ -9,7 +9,7 @@ namespace prepo.Api.Tests.Acceptance
         public GenericPersonaChildBasicTests67()
         {
             LinkRelList = new[] { "users", "user:id=sam", "personas" };
-            UrlPrefix = "/user/sam/personas";
+            UrlPrefix = "/users/sam/personas";
             ResourceName = "persona";
             ResourceList = "personas";
 

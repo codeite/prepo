@@ -184,7 +184,8 @@ namespace prepo.Api.Tests.Acceptance
             // Act
             var resource = client
                 .GetRoot()
-                .PostToRel(ResourceList, null, new JsonBodyContent("{'id':77}"));
+                .FollowRelList(LinkRelList)
+                .Post(new JsonBodyContent("{'id':77}"));
 
             // Assert
             resource.Location.Should().Be("http://dev.prepo.codeite.com" + UrlPrefix + @"/77");
