@@ -18,9 +18,14 @@ namespace prepo.Client
                 baseUri = "http://dev.prepo.codeite.com";
             }
 
-            options = options.Concat(new []{new Accept("application/json"), }).ToArray();
+            var optionsList = options.ToList();
 
-            _client = new RestClient(baseUri, options);    
+            if (!optionsList.Any(x => x is Accept))
+            {
+                optionsList.Add(new Accept("application/json"));
+            }
+
+            _client = new RestClient(baseUri, optionsList.ToArray());    
         }
 
         public ApiResource GetRoot()
