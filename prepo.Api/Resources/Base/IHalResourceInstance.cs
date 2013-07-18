@@ -6,6 +6,7 @@ namespace prepo.Api.Resources.Base
     public interface IHalResourceInstance
     {
         object ToDynamicJson();
+        string ToXml();
     }
 
     public class HalCollectionResourceInstance : IHalResourceInstance
@@ -46,17 +47,21 @@ namespace prepo.Api.Resources.Base
                 }
             }
         }
-    
 
         public object ToDynamicJson()
         {
             return _resource.ToDynamicJson(null, GetAdditionalRelatedResources());
         }
+
+        public string ToXml()
+        {
+            return _resource.ToXml(null, GetAdditionalRelatedResources());
+        }
     }
 
     public class HalInstanceResourceInstance : IHalResourceInstance
     {
-         private readonly IHalResource _resource;
+        private readonly IHalResource _resource;
         private readonly DbObject _instance;
 
         public HalInstanceResourceInstance(IHalResource resource, DbObject instance)
@@ -68,6 +73,11 @@ namespace prepo.Api.Resources.Base
         public object ToDynamicJson()
         {
             return _resource.ToDynamicJson(_instance, GetAdditionalRelatedResources());
+        }
+
+        public string ToXml()
+        {
+            return _resource.ToXml(_instance, GetAdditionalRelatedResources());
         }
 
         public IEnumerable<ResourceLink> GetAdditionalRelatedResources()

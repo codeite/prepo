@@ -6,41 +6,38 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Reflection;
-using System.Web;
 using Codeite.Core.Json;
-using Newtonsoft.Json;
 using prepo.Api.Contracts.Models;
 using prepo.Api.Infrastructure.Reflecting;
-using prepo.Api.Resources;
 using prepo.Api.Resources.Base;
 
 namespace prepo.Api.Infrastructure
 {
-    public class HalJsonMediaTypeFormatter : BufferedMediaTypeFormatter
+    public class HalXmlMediaTypeFormatter : BufferedMediaTypeFormatter
     {
         private readonly JsonModelBinderCache _jsonModelBinderCache;
 
-        public HalJsonMediaTypeFormatter(JsonModelBinderCache jsonModelBinderCache)
+        public HalXmlMediaTypeFormatter(JsonModelBinderCache jsonModelBinderCache)
         {
             _jsonModelBinderCache = jsonModelBinderCache;
-            SupportedMediaTypes.Add(new MediaTypeWithQualityHeaderValue("application/hal+json"));
-            SupportedMediaTypes.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            this.SupportedMediaTypes.Add(new MediaTypeWithQualityHeaderValue("application/hal+xml"));
+            this.SupportedMediaTypes.Add(new MediaTypeWithQualityHeaderValue("application/xml"));
         }
 
         public override bool CanReadType(Type type)
         {
-            var cwt = typeof(IHalResourceInstance).IsAssignableFrom(type);
-            cwt |= typeof(DbObject).IsAssignableFrom(type);
+            var cwt = typeof (IHalResourceInstance).IsAssignableFrom(type);
+            cwt |= typeof (DbObject).IsAssignableFrom(type);
             return cwt;
         }
 
         public override bool CanWriteType(Type type)
         {
-            var cwt = typeof(IHalResourceInstance).IsAssignableFrom(type);
+            var cwt = typeof (IHalResourceInstance).IsAssignableFrom(type);
             return cwt;
         }
 
-        public override void WriteToStream(Type type, object value, Stream writeStream, System.Net.Http.HttpContent content)
+        public override void WriteToStream(Type type, object value, Stream writeStream, HttpContent content)
         {
             var halResource = value as IHalResourceInstance;
 
@@ -51,12 +48,13 @@ namespace prepo.Api.Infrastructure
 
             var writer = new StreamWriter(writeStream);
 
-            var json = halResource.ToDynamicJson().ToJsonString();
-            writer.Write(json);
+            var xml = halResource.ToXml();
+            writer.Write(xml);
             writer.Flush();
         }
 
-        public override object ReadFromStream(Type type, Stream readStream, System.Net.Http.HttpContent content, IFormatterLogger formatterLogger)
+        public override object ReadFromStream(Type type, Stream readStream, HttpContent content,
+                                              IFormatterLogger formatterLogger)
         {
             if (typeof (DbObject).IsAssignableFrom(type))
             {

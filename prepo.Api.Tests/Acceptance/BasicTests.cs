@@ -21,7 +21,6 @@ namespace prepo.Api.Tests.Acceptance
             var root = client.GetRoot();
 
             // Assert
-            Console.WriteLine(root.Body);
             root.Body.ShouldBeJson(@"
             {
                 '_links': { 
@@ -42,7 +41,11 @@ namespace prepo.Api.Tests.Acceptance
             var root = client.GetRoot();
 
             // Assert
-            Console.WriteLine(root.Body);
+            root.Body.ShouldBeXml(@"
+           <resource href=""/"">
+              <link rel=""users"" href=""/users"" />
+              <link rel=""personas"" href=""/personas"" />
+            </resource>");
         }
     }
 }

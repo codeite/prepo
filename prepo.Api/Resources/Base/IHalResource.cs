@@ -9,6 +9,7 @@ namespace prepo.Api.Resources.Base
     public interface IHalResource
     {
         object ToDynamicJson(DbObject instance, IEnumerable<ResourceLink> additionalLinks = null);
+        string ToXml(DbObject instance, IEnumerable<ResourceLink> additionalLinks = null);
         ResourceLink SelfLink { get; }
         IEnumerable<ResourceLink> GetRelatedResources();
         IEnumerable<IHalResource> GetEmbededResources();

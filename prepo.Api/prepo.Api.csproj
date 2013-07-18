@@ -115,6 +115,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Infrastructure\HalXmlMediaTypeFormatter.cs" />
     <Compile Include="Infrastructure\Reflecting\JsonModelBinderCache.cs" />
     <Compile Include="Infrastructure\Reflecting\MemberAccessHelperException.cs" />
     <Compile Include="Infrastructure\Reflecting\MethodAccessHelper.cs" />

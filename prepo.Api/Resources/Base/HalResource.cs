@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
 using prepo.Api.Contracts.Models;
 using prepo.Api.Contracts.Services;
 using prepo.Api.Infrastructure;
@@ -47,6 +48,24 @@ namespace prepo.Api.Resources.Base
             {
                 return ResourceName;
             }
+        }
+
+        public virtual string ToXml(DbObject instance, IEnumerable<ResourceLink> additionalLinks = null)
+        {
+            var document = new XDocument();
+
+
+            var root = new XElement("resource");
+            document.Add(root);
+            root.Add(new XAttribute("href", _selfLink.Href));
+
+            foreach (var relatedResource in GetRelatedResources().Concat(additionalLinks ?? new ResourceLink[0]))
+            {
+                root.Add(new XElement("link", new XAttribute("href", relatedResource.Href), new XAttribute("rel", relatedResource.Name)));
+            }
+
+
+            return document.ToString();
         }
 
         public virtual object ToDynamicJson(DbObject instance, IEnumerable<ResourceLink> additionalLinks = null)

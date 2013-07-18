@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Web.Http.Dispatcher;
 using Autofac;
@@ -55,15 +56,22 @@ namespace prepo.Api
             // For more information, refer to: http://www.asp.net/web-api
             config.EnableSystemDiagnosticsTracing();
 
-            RegisterMediaFormatter(config, new JsonModelBinderCache());
+
+            var binderCache = new JsonModelBinderCache();
+            RegisterJsonMediaFormatter(config, new HalJsonMediaTypeFormatter(binderCache));
+            RegisterXmlMediaFormatter(config, new HalXmlMediaTypeFormatter(binderCache));
         }
 
-        public static void RegisterMediaFormatter(HttpConfiguration config, JsonModelBinderCache modelBinderCache)
+        private static void RegisterXmlMediaFormatter(HttpConfiguration config, MediaTypeFormatter mediaTypeFormatter)
         {
-            var jsonFormatter = config.Formatters.JsonFormatter;
-            config.Formatters.Remove(jsonFormatter);
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
+            config.Formatters.Add(mediaTypeFormatter);
+        }
 
-            config.Formatters.Add(new HalJsonMediaTypeFormatter(modelBinderCache));
+        public static void RegisterJsonMediaFormatter(HttpConfiguration config, MediaTypeFormatter mediaTypeFormatter)
+        {
+            config.Formatters.Remove(config.Formatters.JsonFormatter);
+            config.Formatters.Add(mediaTypeFormatter);
         }
     }
 }
