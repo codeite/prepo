@@ -20,8 +20,9 @@ namespace prepo.Api.Resources
             {
                 return new Dictionary<string, IHalResource>
                 {
-                    { UserCollectionResource.CollectionName, new UserCollectionResource(this) },
-                    { PersonaCollectionResource.CollectionName, new PersonaCollectionResource(this) }
+                    { UserResource.CollectionName, new UserResource.Collection(this) },
+                    { PersonaResource.CollectionName, new PersonaResource.Collection(this) },
+                    { SettingsResource.CollectionName, new SettingsResource.Collection(this) },
                 };
             }
         }

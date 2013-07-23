@@ -26,7 +26,8 @@ namespace prepo.Api.Tests.Acceptance
                 '_links': { 
                     'self': {'href': '/'},
                     'users': {'href': '/users'},
-                    'personas': {'href': '/personas'}
+                    'personas': {'href': '/personas'},
+                    'settings': {'href': '/settings'},
                 }
             }");
         }
@@ -45,6 +46,7 @@ namespace prepo.Api.Tests.Acceptance
            <resource href=""/"">
               <link rel=""users"" href=""/users"" />
               <link rel=""personas"" href=""/personas"" />
+              <link rel=""settings"" href=""/settings"" />
             </resource>");
         }
     }

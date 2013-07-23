@@ -10,4 +10,14 @@
         public string Name { get; set; }
         public int Age { get; set; }
     }
+
+    public class PrepoSetting : DbObject
+    {
+        public PrepoSetting(string id)
+        {
+            Id = id;
+        }
+
+        public string Value;
+    }
 }

@@ -122,6 +122,7 @@
     <Compile Include="Infrastructure\ResourceHttpControllerSelector.cs" />
     <Compile Include="Infrastructure\MyHttpControllerTypeResolver.cs" />
     <Compile Include="Resources\Base\IHalResourceInstance.cs" />
+    <Compile Include="Resources\SettingsResource.cs" />
     <Compile Include="Services\DboRepository.cs" />
     <Compile Include="Models\SaveResourceResult.cs">
       <SubType>Code</SubType>
@@ -147,12 +148,10 @@
     <Compile Include="Resources\Base\HalItemResource.cs" />
     <Compile Include="Resources\Base\IHalResource.cs" />
     <Compile Include="Resources\Base\HalPagedCollectionResource.cs" />
-    <Compile Include="Resources\PersonaCollectionResource.cs" />
-    <Compile Include="Resources\PersonaItemResource.cs" />
+    <Compile Include="Resources\PersonaResource.cs" />
     <Compile Include="Resources\Base\ResourceLink.cs" />
     <Compile Include="Resources\RootResource.cs" />
-    <Compile Include="Resources\UserItemResource.cs" />
-    <Compile Include="Resources\UserCollectionResource.cs" />
+    <Compile Include="Resources\UserResource.cs" />
     <Compile Include="Services\OldResourceRepository.cs" />
   </ItemGroup>
   <ItemGroup>

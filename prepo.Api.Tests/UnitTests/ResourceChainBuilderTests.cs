@@ -51,7 +51,7 @@ namespace prepo.Api.Tests.UnitTests
 
             // Assert
             root.Should().BeOfType<RootResource>();
-            head.Should().BeOfType<UserCollectionResource>();
+            head.Should().BeOfType<UserResource.Collection>();
 
             head.Owner.Should().BeOfType<RootResource>();
             head.Owner.Should().Be(root);
@@ -71,9 +71,9 @@ namespace prepo.Api.Tests.UnitTests
 
             // Assert
             root.Should().BeOfType<RootResource>();
-            head.Should().BeOfType<UserItemResource>();
+            head.Should().BeOfType<UserResource.Item>();
 
-            var user = head as UserItemResource;
+            var user = head as UserResource.Item;
             user.Id.Should().Be(id);
         }
 
@@ -89,7 +89,7 @@ namespace prepo.Api.Tests.UnitTests
 
             // Assert
             root.Should().BeOfType<RootResource>();
-            head.Should().BeOfType<PersonaCollectionResource>();
+            head.Should().BeOfType<PersonaResource.Collection>();
         }
 
         [TestCase("/users/Sam/personas/MrFantastic", "Sam", "MrFantastic")]
@@ -106,9 +106,9 @@ namespace prepo.Api.Tests.UnitTests
 
             // Assert
             root.Should().BeOfType<RootResource>();
-            head.Should().BeOfType<PersonaItemResource>();
+            head.Should().BeOfType<PersonaResource.Item>();
 
-            var persona = head as PersonaItemResource;
+            var persona = head as PersonaResource.Item;
             persona.Id.Should().Be(id);
         }
     }
