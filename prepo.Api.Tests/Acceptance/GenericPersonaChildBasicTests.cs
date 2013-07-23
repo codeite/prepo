@@ -4,9 +4,9 @@ using prepo.Api.Tests.Builders;
 namespace prepo.Api.Tests.Acceptance
 {
     [TestFixture]
-    public class GenericPersonaChildBasicTests67 : GenericBasicTests<PersonaBuilder>
+    public class GenericPersonaChildBasicTests : GenericBasicTests<PersonaBuilder>
     {
-        public GenericPersonaChildBasicTests67()
+        public GenericPersonaChildBasicTests()
         {
             LinkRelList = new[] { "users", "user:id=sam", "personas" };
             UrlPrefix = "/users/sam/personas";

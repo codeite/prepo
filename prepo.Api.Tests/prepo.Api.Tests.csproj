@@ -67,7 +67,7 @@
     <Compile Include="Acceptance\BasicUserTests.cs" />
     <Compile Include="Acceptance\GenericBasicTests.cs" />
     <Compile Include="Acceptance\GenericPersonaBasicTests.cs" />
-    <Compile Include="Acceptance\GenericPersonaChildBasicTests66.cs" />
+    <Compile Include="Acceptance\GenericPersonaChildBasicTests.cs" />
     <Compile Include="Acceptance\GenericUserBasicTests.cs" />
     <Compile Include="Acceptance\SubtlyUserTests.cs" />
     <Compile Include="Acceptance\UserChildTests.cs" />

@@ -10,12 +10,6 @@ namespace prepo.Api.Resources
     public class PersonaCollectionResource : HalPagedCollectionResource<PrepoPersona>
     {
         public const string CollectionName = "personas";
-        /*
-        public PersonaCollectionResource(string location)
-            : base(UriBuilderHelper.Combine(location, "/personas"), "persona", "personas")
-        {
-        }
-        */
 
         public PersonaCollectionResource(IHalResource owner)
             : base(owner, CollectionName, PersonaItemResource.ItemName)

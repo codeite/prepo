@@ -40,6 +40,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\DbObject.cs" />
+    <Compile Include="Models\PrepoPersona.cs" />
+    <Compile Include="Models\PrepoRoot.cs" />
     <Compile Include="Models\PrepoUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IRepository.cs" />
